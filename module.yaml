@@ -1,8 +1,9 @@
-name: ""
+name: gitops-db2-schema
 type: gitops
-description: ""
+description: Module to populate a gitops repository with the resources to configure a schema on a DB2 instance
 tags:
-  - tools
+  - db2
+  - schema
   - gitops
 versions:
   - platforms:
