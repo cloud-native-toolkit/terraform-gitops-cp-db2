@@ -1,0 +1,11 @@
+name: gitops-db2-schema
+type: gitops
+description: >-
+  Module to populate a gitops repository with the resources to configure a
+  schema on a DB2 instance
+tags:
+  - db2
+  - schema
+  - gitops
+versions: []
+id: github.com/cloud-native-toolkit/terraform-gitops-db2-schema
