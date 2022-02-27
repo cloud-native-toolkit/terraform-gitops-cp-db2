@@ -1,5 +1,5 @@
 module "db2" {
-  source = "https://github.com/cloud-native-toolkit/terraform-gitops-cp-db2-oltp"
+  source = "github.com/cloud-native-toolkit/terraform-gitops-cp-db2-oltp"
   gitops_config = module.gitops.gitops_config
   git_credentials = module.gitops.git_credentials
   server_name = module.gitops.server_name
