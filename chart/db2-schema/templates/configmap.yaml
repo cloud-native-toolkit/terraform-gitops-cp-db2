@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.ConfigmapName }}
+  labels:
+  {{- include "db2schema-setup-job.labels" . | nindent 4 }}
+data:
+  db2schema_setup.sh: |
+    #!/bin/bash
+
+    ############################################################
+    # Login to Cloud pak for Data and get the token
+    ############################################################
+    CPD_CLUSTER_HOST="https://ibm-nginx-svc"
+    USERNAME="${ENV_USERNAME}"
+    PASSWORD="${ENV_PASSWORD}"
+
+    if [ "${CPD_CLUSTER_HOST}" != "" ] && [ "${USERNAME}" != "" ] && [ "${PASSWORD}" != "" ]; then
+      if ! CPD_TOKEN=$(
+        curl -k -X POST \
+          "${CPD_CLUSTER_HOST}"/icp4d-api/v1/authorize \
+          -H 'cache-control: no-cache' \
+          -H 'content-type: application/json' \
+          -d '{"username": "'"${USERNAME}"'","password":"'"${PASSWORD}"'"}' | jq -r '.token'
+      ); then
+        exit 1
+      fi
+    fi
+
+    ############################################################
+    #  Create DB2OLTP in Cloud pak for Data
+    ############################################################
+    if [ "$CPD_CLUSTER_HOST" != "" ] && [ "$CPD_TOKEN" != "" ]; then
+    if ! DBCREATION_RESPONSE=$(
+        curl -k -X POST \
+          https://database-core-svc:3025/v1/provision \
+          -H 'Authorization: Bearer '"$CPD_TOKEN"'' \ 
+          -H 'cache-control: no-cache' \
+          -H 'content-type: application/json' \
+          -d '{"ServiceInstanceDisplayName": "DB2", "ServiceInstanceNamespace":  "'"${InstanceNamespace}"'","ZenServiceInstanceInfo": { "ZenServiceInstanceType":  "'"${InstanceType}"'","ZenServiceInstanceID": "",
+             "ZenServiceInstanceVersion":  "'"${InstanceVersion}"'","zenServiceInstanceSecret":  "'"${InstanceSecret}"'",},"metadata": { "api": true,"dedicated": false,"database-name":  "'"${database-name}"'","storage-class": [{ 
+             "name":  "'"${storage-class}"'"}],"size": [{ "value":  ${pvc-size} }],"storage-class-access-mode": [{"name": "ReadWriteMany"} ]}}'
+          ); then
+        echo "Failed to Create DB2OLTP"
+        exit 1
+      fi
+      echo "DB2OLTP created"
+      

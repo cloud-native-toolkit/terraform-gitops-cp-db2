@@ -1,10 +1,21 @@
 locals {
-  name          = "my-module"
+  name          = "db2schema"
   bin_dir       = module.setup_clis.bin_dir
   yaml_dir      = "${path.cwd}/.tmp/${local.name}/chart/${local.name}"
   service_url   = "http://${local.name}.${var.namespace}"
   values_content = {
-  }
+jobName = "${local.name}-job" 
+ConfigmapName = "${local.name}-script-configmap"
+cmname = "${local.name}-configmap"
+storageClassName = var.storageClass
+namespace = var.namespace
+database-name = var.database_name
+pvc_size = var.pvc_size
+InstanceSecret = var.defaultuserpwd
+InstanceType = var.db2instancetype
+InstanceVersion = var.db2instanceversion
+
+}
   layer = "services"
   type  = "base"
   application_branch = "main"

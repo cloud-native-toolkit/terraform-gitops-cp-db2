@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.cmname }}
+  labels:
+  {{- include "db2schema-setup-job.labels" . | nindent 4 }}
+data:
+  storageClassName: {{ .Values.storageClassName }}
+  database-name: {{ .Values.database-name }}
+  pvc_size: {{ .Values.pvc_size }}
+  InstanceSecret: {{ .Values.InstanceSecret }}
+  InstanceType: {{ .Values.InstanceType }}
+  InstanceVersion: {{ .Values.InstanceVersion }}
+  InstanceNamespace: {{ .Values.namespace }} 
+  

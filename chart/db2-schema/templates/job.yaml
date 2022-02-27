@@ -1,0 +1,50 @@
+apiVersion: batch/v1beta1
+kind: Job
+metadata:
+  name: {{ .Values.jobName }}
+  label:
+    app: db2schema
+spec:
+  template:
+    metadata:
+      name: db2-setup-pod
+    spec:
+      restartPolicy: Never
+      volumes:
+        - name: db2-scripts
+          configMap:
+            name: {{ .Values.ConfigmapName }}
+            defaultMode: 0777
+      containers:
+        - name: db2-setup-pod
+          image: quay.io/ibmgaragecloud/alpine-curl
+          volumeMounts:
+            - mountPath: /db2scripts
+              name: db2scripts
+          env:
+            - name: ENV_USERNAME
+              value: "admin"
+            - name: ENV_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: admin-user-details
+                  key: initial_admin_password
+            - name: InstanceNamespace
+              value: {{ .Values.namespace }} 
+            - name: InstanceSecret
+              value: {{ .Values.InstanceSecret }}
+            - name: database-name
+              value: {{ .Values.database-name }}
+            - name: storage-class
+              value: {{ .Values.storageClassName }}
+            - name: pvc-size
+              value: {{ .Values.pvc_size }}
+            - name: InstanceType
+              value: {{ .Values.InstanceType }}
+            - name: InstanceVersion
+              value:  {{ .Values.InstanceVersion }}
+          command:
+            - /bin/sh
+          args:
+            - '-c'
+            - /db2scripts/db2schema_setup.sh

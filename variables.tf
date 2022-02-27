@@ -79,3 +79,39 @@ variable "server_name" {
   description = "The name of the server"
   default     = "default"
 }
+
+variable "storageClass" {
+  type        = string
+  description = "The name of the server"
+  default     = "portworx-db2-rwx-sc"
+}
+
+variable "database_name" {
+  type        = string
+  description = "The name of the database to be created"
+  default     = "OMS_DB"
+}
+
+variable "pvc_size" {
+  type        = number
+  description = "The size of PVC to be created for DB PVC"
+  default     = 100
+}
+
+variable "db2instancetype" {
+  type        = string
+  description = "type of db2 intance to be created - db2oltp of db2wh"
+  default     = "db2oltp"
+}
+
+variable "db2instanceversion" {
+  type        = string
+  description = "version of the DB2 instance"
+  default     = "11.5.5.0-x86_64"
+}
+
+variable "defaultuserpwd" {
+  type        = string
+  description = "Password of the default user"
+  default     = "db2password"
+}
