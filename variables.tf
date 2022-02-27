@@ -116,7 +116,4 @@ variable "defaultuserpwd" {
   default     = "db2password"
 }
 
-variable "namespace" {
-  type        = string
-  description = "namespace for deploying db2 schema"
-}
+
