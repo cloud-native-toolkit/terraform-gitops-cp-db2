@@ -37,7 +37,7 @@ data:
           -H 'Authorization: Bearer '"$CPD_TOKEN"'' \ 
           -H 'cache-control: no-cache' \
           -H 'content-type: application/json' \
-          -d '{"ServiceInstanceDisplayName": "DB2", "ServiceInstanceNamespace":  "'"${InstanceNamespace}"'","ZenServiceInstanceInfo": { "ZenServiceInstanceType":  "'"${InstanceType}"'","ZenServiceInstanceID": "",
+          -d '{"ServiceInstanceDisplayName": "DB2", "ServiceInstanceNamespace":  "'"${InstanceNamespace}"'","ZenServiceInstanceInfo": { "ZenServiceInstanceType":  "'"${InstanceType}"'","ZenServiceInstanceID": "9876543211",
              "ZenServiceInstanceVersion":  "'"${InstanceVersion}"'","zenServiceInstanceSecret":  "'"${InstanceSecret}"'",},"metadata": { "api": true,"dedicated": false,"database-name":  "'"${database-name}"'","storage-class": [{ 
              "name":  "'"${storage-class}"'"}],"size": [{ "value":  ${pvc-size} }],"storage-class-access-mode": [{"name": "ReadWriteMany"} ]}}'
           ); then

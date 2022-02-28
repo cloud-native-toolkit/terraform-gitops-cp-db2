@@ -21,6 +21,7 @@ variable "bootstrap_prefix" {
 variable "namespace" {
   type        = string
   description = "Namespace for tools"
+  default = "gitops-cp4d-instance"
 }
 
 variable "cluster_name" {
