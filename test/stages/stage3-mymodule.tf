@@ -4,7 +4,7 @@ module "gitops_module" {
   gitops_config = module.gitops.gitops_config
   git_credentials = module.gitops.git_credentials
   server_name = module.gitops.server_name
-  namespace = var.namespace
+  namespace = "gitops-cp4d-instance"
   kubeseal_cert = module.gitops.sealed_secrets_cert
  
 
