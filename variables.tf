@@ -117,4 +117,11 @@ variable "defaultuserpwd" {
   default     = "db2password"
 }
 
+variable "db2instanceid" {
+  type        = string
+  description = "Password of the default user"
+  default     = "9876543211"
+}
+
+
 

@@ -14,6 +14,7 @@ pvc_size = var.pvc_size
 InstanceSecret = var.defaultuserpwd
 InstanceType = var.db2instancetype
 InstanceVersion = var.db2instanceversion
+InstanceId = var.db2instanceid
 
 }
   layer = "services"

@@ -1,9 +1,9 @@
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 kind: Job
 metadata:
   name: {{ .Values.jobName }}
-  label:
-    app: db2schema
+  #label:
+    #app: db2schema
 spec:
   template:
     metadata:
@@ -34,7 +34,7 @@ spec:
             - name: InstanceSecret
               value: {{ .Values.InstanceSecret }}
             - name: database-name
-              value: {{ .Values.database-name }}
+              value: {{ .Values.database_name }}
             - name: storage-class
               value: {{ .Values.storageClassName }}
             - name: pvc-size
@@ -43,6 +43,8 @@ spec:
               value: {{ .Values.InstanceType }}
             - name: InstanceVersion
               value:  {{ .Values.InstanceVersion }}
+            - name: InstanceId
+              value:  {{ .Values.InstanceId }}
           command:
             - /bin/sh
           args:
