@@ -50,12 +50,12 @@ else
   sleep 30
 fi
 
-RESOURCE="db2oltp"
+RESOURCE="db2oltp-9876543211"
 count=0
-until kubectl get pod -n "${NAMESPACE}"|grep ${RESOURCE} || [[ $count -eq 20 ]]; do
+until kubectl get pod -n "${NAMESPACE}"|grep ${RESOURCE} || [[ $count -eq 21 ]]; do
   echo "Waiting for job ${RESOURCE} in ${NAMESPACE}"
   count=$((count + 1))
-  sleep 15
+  sleep 45
 done
 
 if [[ $count -eq 20 ]]; then
