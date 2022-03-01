@@ -11,7 +11,7 @@ spec:
     spec:
       restartPolicy: Never
       volumes:
-        - name: db2-scripts
+        - name: db2scripts
           configMap:
             name: {{ .Values.ConfigmapName }}
             defaultMode: 0777
@@ -38,13 +38,13 @@ spec:
             - name: storage-class
               value: {{ .Values.storageClassName }}
             - name: pvc-size
-              value: {{ .Values.pvc_size }}
+              value: {{ .Values.pvc_size | quote }}
             - name: InstanceType
               value: {{ .Values.InstanceType }}
             - name: InstanceVersion
               value:  {{ .Values.InstanceVersion }}
             - name: InstanceId
-              value:  {{ .Values.InstanceId }}
+              value:  {{ .Values.InstanceId | quote }}
           command:
             - /bin/sh
           args:

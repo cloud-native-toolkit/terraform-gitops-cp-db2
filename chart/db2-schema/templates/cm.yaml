@@ -7,10 +7,10 @@ metadata:
 data:
   storageClassName: {{ .Values.storageClassName }}
   database-name: {{ .Values.database_name }}
-  pvc_size: {{ .Values.pvc_size }}
+  pvc_size: {{ .Values.pvc_size | quote }}
   InstanceSecret: {{ .Values.InstanceSecret }}
   InstanceType: {{ .Values.InstanceType }}
   InstanceVersion: {{ .Values.InstanceVersion }}
   InstanceNamespace: {{ .Values.namespace }} 
-  InstanceId: {{ .Values.InstanceId }} 
+  InstanceId: {{ .Values.InstanceId | quote }} 
   
