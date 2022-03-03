@@ -114,13 +114,9 @@ variable "defaultuserpwd" {
 variable "db2instanceid" {
   type        = string
   description = "Unique instance ID for each newly created DB2oltp"
-  default     = "98765432122"
+  default     = "98765432123"
 }
-resource null_resource write_instanceid {
-  provisioner "local-exec" {
-    command = "echo -n '${var.db2instanceid}' > .db2instanceid"
-  }
-}
+
 
 
 
