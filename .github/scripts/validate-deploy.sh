@@ -10,7 +10,7 @@ BRANCH=$(jq -r '.branch // "main"' gitops-output.json)
 SERVER_NAME=$(jq -r '.server_name // "default"' gitops-output.json)
 LAYER=$(jq -r '.layer_dir // "2-services"' gitops-output.json)
 TYPE=$(jq -r '.type // "base"' gitops-output.json)
-
+INSTANCEID= $(cat .db2instanceid)
 mkdir -p .testrepo
 
 git clone https://${GIT_TOKEN}@${GIT_REPO} .testrepo
@@ -50,7 +50,7 @@ else
   sleep 30
 fi
 
-RESOURCE="db2oltp-9876543211"
+RESOURCE="db2oltp-"${INSTANCEID}"-db2u"
 count=0
 until kubectl get pod -n "${NAMESPACE}"|grep ${RESOURCE} || [[ $count -eq 21 ]]; do
   echo "Waiting for job ${RESOURCE} in ${NAMESPACE}"
@@ -58,13 +58,13 @@ until kubectl get pod -n "${NAMESPACE}"|grep ${RESOURCE} || [[ $count -eq 21 ]];
   sleep 45
 done
 
-if [[ $count -eq 20 ]]; then
+if [[ $count -eq 21 ]]; then
   echo "Timed out waiting for job ${RESOURCE} in ${NAMESPACE}"
   kubectl get all -n "${NAMESPACE}"
   exit 1
 fi
 
-#kubectl rollout status "pod" -n "${NAMESPACE}" || exit 1
+kubectl get all -n "${NAMESPACE}" || exit 1
 
 cd ..
 rm -rf .testrepo

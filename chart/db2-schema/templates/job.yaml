@@ -8,13 +8,10 @@ spec:
   template:
     metadata:
       name: db2-setup-pod
+      annotations:
+        checksum/config-map: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
     spec:
       restartPolicy: Never
-      volumes:
-        - name: db2scripts
-          configMap:
-            name: {{ .Values.ConfigmapName }}
-            defaultMode: 0777
       containers:
         - name: db2-setup-pod
           image: quay.io/ibmgaragecloud/alpine-curl
@@ -35,10 +32,8 @@ spec:
               value: {{ .Values.InstanceSecret }}
             - name: database-name
               value: {{ .Values.database_name }}
-            - name: storage-class
+            - name: storageclassname
               value: {{ .Values.storageClassName }}
-            - name: pvc-size
-              value: {{ .Values.pvc_size | quote }}
             - name: InstanceType
               value: {{ .Values.InstanceType }}
             - name: InstanceVersion
@@ -49,4 +44,9 @@ spec:
             - /bin/sh
           args:
             - '-c'
-            - /db2scripts/db2schema_setup.sh
+            - cat /db2scripts/db2schema_setup.sh && ls -l /db2scripts/ && /db2scripts/db2schema_setup.sh
+      volumes:
+        - name: db2scripts
+          configMap:
+            name: {{ .Values.ConfigmapName }}
+            defaultMode: 0777

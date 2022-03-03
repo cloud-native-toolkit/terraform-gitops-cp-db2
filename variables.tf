@@ -93,12 +93,6 @@ variable "database_name" {
   default     = "OMS_DB"
 }
 
-variable "pvc_size" {
-  type        = number
-  description = "The size of PVC to be created for DB PVC"
-  default     = 100
-}
-
 variable "db2instancetype" {
   type        = string
   description = "type of db2 intance to be created - db2oltp of db2wh"
@@ -119,9 +113,11 @@ variable "defaultuserpwd" {
 
 variable "db2instanceid" {
   type        = string
-  description = "Password of the default user"
-  default     = "9876543211"
+  description = "Unique instance ID for each newly created DB2oltp"
+  default     = "98765432122"
 }
+
+
 
 
 
