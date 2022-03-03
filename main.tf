@@ -37,11 +37,7 @@ resource null_resource create_yaml {
     }
   }
 }
-resource null_resource write_namespace {
-  provisioner "local-exec" {
-    command = "echo -n '${local.values_content.InstanceId}' > .dbinstanceid"
-  }
-}
+
 resource null_resource setup_gitops {
   depends_on = [null_resource.create_yaml]
 

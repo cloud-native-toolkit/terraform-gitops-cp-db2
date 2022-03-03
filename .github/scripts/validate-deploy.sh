@@ -10,7 +10,7 @@ BRANCH=$(jq -r '.branch // "main"' gitops-output.json)
 SERVER_NAME=$(jq -r '.server_name // "default"' gitops-output.json)
 LAYER=$(jq -r '.layer_dir // "2-services"' gitops-output.json)
 TYPE=$(jq -r '.type // "base"' gitops-output.json)
-INSTANCEID= $(cat .dbinstanceid)
+
 mkdir -p .testrepo
 
 git clone https://${GIT_TOKEN}@${GIT_REPO} .testrepo
@@ -19,7 +19,6 @@ cd .testrepo || exit 1
 
 find . -name "*"
 
-echo "Instanceid: ${INSTANCEID}"
 if [[ ! -f "argocd/${LAYER}/cluster/${SERVER_NAME}/${TYPE}/${NAMESPACE}-${COMPONENT_NAME}.yaml" ]]; then
   echo "ArgoCD config missing - argocd/${LAYER}/cluster/${SERVER_NAME}/${TYPE}/${NAMESPACE}-${COMPONENT_NAME}.yaml"
   exit 1
@@ -52,10 +51,11 @@ else
 fi
 
 RESOURCE01="db2oltp"
-RESOURCE="db2u"
+
 count=0
-until kubectl get pod -n "${NAMESPACE}"|grep ${INSTANCEID} || [[ $count -eq 21 ]]; do
-  echo "Waiting for pod ${RESOURCE} in ${NAMESPACE}"
+#until kubectl get pod -n "${NAMESPACE}"|grep ${INSTANCEID} || [[ $count -eq 21 ]]; do
+until kubectl get pods -l component=${RESOURCE01} -n "${NAMESPACE}"|| [[ $count -eq 21 ]]; do
+  echo "Waiting for pod ${RESOURCE01} in ${NAMESPACE}"
   count=$((count + 1))
   sleep 45
 done
