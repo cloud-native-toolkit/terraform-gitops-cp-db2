@@ -24,7 +24,7 @@ InstanceId = var.db2instanceid
 }
 resource null_resource write_instanceid {
   provisioner "local-exec" {
-    command = "echo -n '${local.InstanceId}' > .db2instanceid"
+    command = "echo -n '${var.db2instanceid}' > .db2instanceid"
   }
 }
 module setup_clis {
