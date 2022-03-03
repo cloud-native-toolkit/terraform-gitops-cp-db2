@@ -116,6 +116,11 @@ variable "db2instanceid" {
   description = "Unique instance ID for each newly created DB2oltp"
   default     = "98765432122"
 }
+resource null_resource write_instanceid {
+  provisioner "local-exec" {
+    command = "echo -n '${var.db2instanceid}' > .db2instanceid"
+  }
+}
 
 
 

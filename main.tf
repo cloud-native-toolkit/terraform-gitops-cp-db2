@@ -1,3 +1,4 @@
+
 locals {
   name          = "db2schema"
   bin_dir       = module.setup_clis.bin_dir
@@ -22,11 +23,7 @@ InstanceId = var.db2instanceid
   namespace = var.namespace
   layer_config = var.gitops_config[local.layer]
 }
-resource null_resource write_instanceid {
-  provisioner "local-exec" {
-    command = "echo -n '${var.db2instanceid}' > .db2instanceid"
-  }
-}
+
 module setup_clis {
   source = "github.com/cloud-native-toolkit/terraform-util-clis.git"
 }

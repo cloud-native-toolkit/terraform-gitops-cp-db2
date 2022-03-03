@@ -19,6 +19,7 @@ cd .testrepo || exit 1
 
 find . -name "*"
 
+echo "Instanceid: ${INSTANCEID}"
 if [[ ! -f "argocd/${LAYER}/cluster/${SERVER_NAME}/${TYPE}/${NAMESPACE}-${COMPONENT_NAME}.yaml" ]]; then
   echo "ArgoCD config missing - argocd/${LAYER}/cluster/${SERVER_NAME}/${TYPE}/${NAMESPACE}-${COMPONENT_NAME}.yaml"
   exit 1
@@ -50,9 +51,10 @@ else
   sleep 30
 fi
 
-RESOURCE="db2oltp-"${INSTANCEID}"-db2u"
+RESOURCE01="db2oltp"
+RESOURCE="db2u"
 count=0
-until kubectl get pod -n "${NAMESPACE}"|grep ${RESOURCE} || [[ $count -eq 21 ]]; do
+until kubectl get pod -n "${NAMESPACE}"|grep ${RESOURCE01}-${INSTANCEID}-${RESOURCE} || [[ $count -eq 21 ]]; do
   echo "Waiting for job ${RESOURCE} in ${NAMESPACE}"
   count=$((count + 1))
   sleep 45
