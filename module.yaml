@@ -1,6 +1,6 @@
 name: gitops-db2-schema
 type: gitops
-description: Module to populate a gitops repository with the resources to create a DB2OLTP on DB2 instance
+description: Module to populate a gitops repository with the resources to configure a schema on a DB2 instance
 tags:
   - db2
   - schema
@@ -19,9 +19,7 @@ versions:
         refs:
           - source: github.com/cloud-native-toolkit/terraform-gitops-namespace.git
             version: ">= 1.0.0"
-   
-     
-variables:
+    variables:
       - name: gitops_config
         moduleRef:
           id: gitops
