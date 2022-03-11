@@ -53,20 +53,22 @@ fi
 RESOURCE01="db2oltp"
 
 count=0
-#until kubectl get pod -n "${NAMESPACE}"|grep ${INSTANCEID} || [[ $count -eq 21 ]]; do
+
 until kubectl get pods -l icpdsupport/addOnId=${RESOURCE01} -n "${NAMESPACE}"|| [[ $count -eq 21 ]]; do
   echo "Waiting for pod ${RESOURCE01} in ${NAMESPACE}"
   count=$((count + 1))
   sleep 45
 done
 
+
+
 if [[ $count -eq 21 ]]; then
   echo "Timed out waiting for job ${RESOURCE} in ${NAMESPACE}"
-  kubectl get all -l icpdsupport/addOnId=${RESOURCE01} -n "${NAMESPACE}"
-  exit 1
+  kubectl get all -n "${NAMESPACE}" 
+  
 fi
 
-kubectl get all -n "${NAMESPACE}" || exit 1
+kubectl get all -l icpdsupport/addOnId=${RESOURCE01} -n "${NAMESPACE}"|| exit 1
 
 cd ..
 rm -rf .testrepo
