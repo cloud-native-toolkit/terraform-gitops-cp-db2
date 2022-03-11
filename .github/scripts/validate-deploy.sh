@@ -54,7 +54,7 @@ RESOURCE01="db2oltp"
 
 count=0
 
-until kubectl get pods -l icpdsupport/addOnId=${RESOURCE01} -n "${NAMESPACE}" || [[ $count -eq 20 ]]; do
+until kubectl get pods -l icpdsupport/addOnId=${RESOURCE01} -n "${NAMESPACE}" 1> /dev/null 2> /dev/null || [[ $count -eq 20 ]]; do
   echo "Waiting for pod ${RESOURCE01} in ${NAMESPACE}"
   count=$((count + 1))
   sleep 45
