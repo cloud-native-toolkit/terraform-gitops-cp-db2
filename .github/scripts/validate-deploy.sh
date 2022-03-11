@@ -62,7 +62,7 @@ done
 
 if [[ $count -eq 21 ]]; then
   echo "Timed out waiting for job ${RESOURCE} in ${NAMESPACE}"
-  kubectl get all -n "${NAMESPACE}"
+  kubectl get all -l icpdsupport/addOnId=${RESOURCE01} -n "${NAMESPACE}"
   exit 1
 fi
 
