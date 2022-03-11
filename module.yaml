@@ -1,4 +1,4 @@
-name: gitops-db2-schema
+name: gitops-cp-db2
 type: gitops
 description: Module to populate a gitops repository with the resources to configure a schema on a DB2 instance
 tags:

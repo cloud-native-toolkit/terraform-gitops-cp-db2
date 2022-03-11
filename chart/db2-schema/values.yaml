@@ -2,7 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-jobName: "db2schema-job"
-ConfigmapName: "db2schema-configmap"
+jobName: "cp-db2-job"
+ConfigmapName: "cp-db2-configmap"
 
 storageClassName: ""

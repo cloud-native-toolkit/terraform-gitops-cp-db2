@@ -3,9 +3,9 @@ kind: ConfigMap
 metadata:
   name: {{ .Values.ConfigmapName }}
   labels:
-    app: db2schema
+    app: cp-db2
 data:
-  db2schema_setup.sh: |
+  cp_db2_setup.sh: |
     #!/bin/sh
 
     ############################################################
