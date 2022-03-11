@@ -4,10 +4,10 @@ locals {
   bin_dir       = module.setup_clis.bin_dir
   yaml_dir      = "${path.cwd}/.tmp/${local.name}/chart/${local.name}"
   service_url   = "http://${local.name}.${var.namespace}"
+  db2instanceid    = var.db2instanceid
   values_content = {
 jobName = "${local.name}-job" 
 ConfigmapName = "${local.name}-script-configmap"
-cmname = "${local.name}-configmap"
 storageClassName = var.storageClass
 namespace = var.cpd_namespace
 database-name = var.database_name

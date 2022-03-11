@@ -40,3 +40,9 @@ output "type" {
   value       = local.type
   depends_on  = [null_resource.setup_gitops]
 }
+
+output "instanceid" {
+  description = "Unique instance ID for each newly created DB2"
+  value       = local.db2instanceid
+  depends_on  = [null_resource.setup_gitops]
+}

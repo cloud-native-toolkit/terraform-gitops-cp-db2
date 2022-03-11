@@ -118,8 +118,8 @@ variable "defaultuserpwd" {
 
 variable "db2instanceid" {
   type        = string
-  description = "Unique instance ID for each newly created DB2oltp"
-  default     = "98765432127"
+  description = "Unique instance ID for each newly created DB2"
+  default     = "98765432129"
 }
 
 

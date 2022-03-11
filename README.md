@@ -35,6 +35,8 @@ module "db2oltp" {
   server_name = module.gitops.server_name
   namespace = "gitops-cp4d-instance"
   kubeseal_cert = module.gitops.sealed_secrets_cert
+  db2instanceid = "98765432132"
+
  
 }
 ```

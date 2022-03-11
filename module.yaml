@@ -48,3 +48,8 @@ versions:
         moduleRef:
           id: gitops
           output: sealed_secrets_cert
+      - name: db2instanceid
+        moduleRef:
+          id: gitops-cp-db2
+          output: instanceid
+          important: true

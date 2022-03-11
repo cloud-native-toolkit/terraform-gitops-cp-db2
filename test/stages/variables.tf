@@ -23,6 +23,7 @@ variable "namespace" {
   description = "Namespace for tools"
 }
 
+
 variable "cpd_namespace" {
   type        = string
   description = "Namespace for cpd services"
@@ -80,4 +81,9 @@ variable "kubeseal_namespace" {
 }
 
 variable "cp_entitlement_key" {
+}
+
+variable "db2instanceid" {
+  type        = string
+  default = "98765432129"
 }
