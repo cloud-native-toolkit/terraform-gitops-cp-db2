@@ -66,7 +66,12 @@ variable "git_credentials" {
 variable "namespace" {
   type        = string
   description = "The namespace where the application should be deployed"
-  default = "gitops-cp4d-instance"
+}
+
+variable "cpd_namespace" {
+  type        = string
+  description = "cpd namespace"
+  default     = "gitops-cp4d-instance"
 }
 
 variable "kubeseal_cert" {

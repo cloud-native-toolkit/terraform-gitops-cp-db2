@@ -9,7 +9,7 @@ jobName = "${local.name}-job"
 ConfigmapName = "${local.name}-script-configmap"
 cmname = "${local.name}-configmap"
 storageClassName = var.storageClass
-namespace = var.namespace
+namespace = var.cpd_namespace
 database-name = var.database_name
 InstanceSecret = var.defaultuserpwd
 InstanceType = var.db2instancetype
@@ -21,6 +21,7 @@ InstanceId = var.db2instanceid
   type  = "base"
   application_branch = "main"
   namespace = var.namespace
+  cpd_namespace = var.cpd_namespace
   layer_config = var.gitops_config[local.layer]
 }
 
@@ -43,7 +44,7 @@ resource null_resource setup_gitops {
 
   triggers = {
     name = local.name
-    namespace = var.namespace
+    namespace = var.cpd_namespace
     yaml_dir = local.yaml_dir
     server_name = var.server_name
     layer = local.layer
