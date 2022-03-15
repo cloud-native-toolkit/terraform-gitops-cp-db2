@@ -89,7 +89,6 @@ variable "server_name" {
 variable "storageClass" {
   type        = string
   description = "The name of the server"
-  default     = "portworx-db2-rwx-sc"
 }
 
 variable "database_name" {

@@ -87,3 +87,9 @@ variable "db2instanceid" {
   type        = string
   default = "98765432190"
 }
+
+variable "storageClass" {
+  type        = string
+  description = "The name of the server"
+  default     = "portworx-db2-rwx-sc"
+}
