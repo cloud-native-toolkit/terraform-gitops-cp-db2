@@ -7,6 +7,7 @@ module "gitops_module" {
   namespace = var.cpd_namespace
   kubeseal_cert = module.gitops.sealed_secrets_cert
   db2instanceid = var.db2instanceid
+  storageClass = var.storageClass
  
 
 }
