@@ -4,7 +4,7 @@ locals {
   bin_dir       = module.setup_clis.bin_dir
   yaml_dir      = "${path.cwd}/.tmp/${local.name}/chart/${local.name}"
   service_url   = "http://${local.name}.${var.namespace}"
-  db2instanceid    = var.db2instanceid
+  db2instanceid    = timestamp()
   values_content = {
 jobName = "${local.name}-job" 
 ConfigmapName = "${local.name}-script-configmap"
@@ -14,7 +14,7 @@ database-name = var.database_name
 InstanceSecret = var.defaultuserpwd
 InstanceType = var.db2instancetype
 InstanceVersion = var.db2instanceversion
-InstanceId = timestamp()
+InstanceId = local.db2instanceid
 CPDClusterHost = var.cp4dclusterhost
 DatabaseHost = var.db2host
 pvcsize = var.pvcsize

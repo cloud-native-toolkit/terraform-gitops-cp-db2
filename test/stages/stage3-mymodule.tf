@@ -6,7 +6,6 @@ module "gitops_module" {
   server_name = module.gitops.server_name
   namespace = var.cpd_namespace
   kubeseal_cert = module.gitops.sealed_secrets_cert
-  db2instanceid = var.db2instanceid
   storageClass = var.storageClass
  
 

@@ -83,11 +83,6 @@ variable "kubeseal_namespace" {
 variable "cp_entitlement_key" {
 }
 
-variable "db2instanceid" {
-  type        = string
-  default = "98765432190"
-}
-
 variable "storageClass" {
   type        = string
   description = "The name of the server"
