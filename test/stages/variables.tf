@@ -95,8 +95,4 @@ variable "database_name" {
   default     = "OMS_DB"
 }
 
-variable "cpd_namespace" {
-  type        = string
-  description = "Namespace where cp4d is provisioned and where the db2 will be created"
-  default = "gitops-cp4d-instance"
-}
+
