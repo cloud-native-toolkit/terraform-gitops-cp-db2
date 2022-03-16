@@ -42,3 +42,15 @@ output "instanceid" {
   value       = local.db2instanceid
   depends_on  = [null_resource.setup_gitops]
 }
+
+output "storageClass" {
+  description = "The server where the module will be deployed"
+  value       = var.storageClass
+  depends_on  = [null_resource.setup_gitops]
+}
+
+output "database_name" {
+  description = "The server where the module will be deployed"
+  value       = var.database_name
+  depends_on  = [null_resource.setup_gitops]
+}

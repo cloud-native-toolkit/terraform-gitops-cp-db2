@@ -60,7 +60,7 @@ until kubectl get statefulset -l icpdsupport/addOnId=${RESOURCE01} -n "${NAMESPA
   sleep 45
 done
 STATEFULSET=$(kubectl get statefulset -l icpdsupport/addOnId=${RESOURCE01} | grep ${RESOURCE01} | awk -v k="text" '{n=split($0,a," "); print a[1]}')
-
+echo "Statefulset: ${STATEFULSET}"
 if [[ $count -eq 20 ]]; then
   echo "Timed out waiting for job ${RESOURCE} in ${NAMESPACE}"
   kubectl get all -n "${NAMESPACE}" 

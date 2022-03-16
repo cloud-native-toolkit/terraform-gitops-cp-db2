@@ -1,5 +1,5 @@
 # Starter kit for a Terraform GitOps module
-Module to provision a gitops repo with the resources necessary to provision a DB2OLTP on DB2 instance in Cloud Pak for Data. 
+Module to provision a gitops repo with the resources necessary to provision a DB2 in Cloud Pak for Data. 
 
 ## Software dependencies
 
@@ -35,6 +35,8 @@ module "db2oltp" {
   server_name = module.gitops.server_name
   namespace = "gitops-cp4d-instance"
   kubeseal_cert = module.gitops.sealed_secrets_cert
+  storageClass = var.storageClass
+  database_name = var.database_name
  
 }
 ```

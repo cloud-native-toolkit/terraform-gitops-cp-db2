@@ -48,3 +48,13 @@ versions:
         moduleRef:
           id: gitops
           output: sealed_secrets_cert
+      - name: storageClass
+        moduleRef:
+          id: gitops-cp-db2
+          output: storageClass
+          important: true
+      - name: database_name
+        moduleRef:
+          id: gitops-cp-db2
+          output: database_name
+          important: true
