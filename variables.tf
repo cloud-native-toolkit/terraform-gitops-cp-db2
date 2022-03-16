@@ -65,11 +65,6 @@ variable "git_credentials" {
 
 variable "namespace" {
   type        = string
-  description = "Redundant namespace"
-}
-
-variable "cpd_namespace" {
-  type        = string
   description = "Namespace where cp4d is provisioned and where the db2 will be created"
 }
 
