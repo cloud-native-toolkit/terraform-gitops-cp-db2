@@ -54,13 +54,12 @@ RESOURCE01="db2oltp"
 
 count=0
 
-until kubectl get pods -l icpdsupport/addOnId=${RESOURCE01} -n "${NAMESPACE}" 1> /dev/null 2> /dev/null || [[ $count -eq 20 ]]; do
+until kubectl get statefulset -l icpdsupport/addOnId=${RESOURCE01} -n "${NAMESPACE}"  || [[ $count -eq 20 ]]; do
   echo "Waiting for pod ${RESOURCE01} in ${NAMESPACE}"
   count=$((count + 1))
   sleep 45
 done
-
-
+STATEFULSET=$(kubectl get statefulset -l icpdsupport/addOnId=${RESOURCE01} | grep ${RESOURCE01} | awk -v k="text" '{n=split($0,a," "); print a[1]}')
 
 if [[ $count -eq 20 ]]; then
   echo "Timed out waiting for job ${RESOURCE} in ${NAMESPACE}"
@@ -68,7 +67,9 @@ if [[ $count -eq 20 ]]; then
   
 fi
 
-kubectl get all -l icpdsupport/addOnId=${RESOURCE01} -n "${NAMESPACE}"|| exit 1
+#kubectl get all -l icpdsupport/addOnId=${RESOURCE01} -n "${NAMESPACE}"|| exit 1
+#kubectl wait --for=condition=complete job/${JOB} || exit 1
+kubectl rollout status "statefulset/${STATEFULSET}" || exit 1
 
 cd ..
 rm -rf .testrepo

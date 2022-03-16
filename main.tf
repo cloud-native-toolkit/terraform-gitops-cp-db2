@@ -14,7 +14,12 @@ database-name = var.database_name
 InstanceSecret = var.defaultuserpwd
 InstanceType = var.db2instancetype
 InstanceVersion = var.db2instanceversion
-InstanceId = var.db2instanceid
+InstanceId = timestamp()
+CPDClusterHost = var.cp4dclusterhost
+DatabaseHost = var.db2host
+pvcsize = var.pvcsize
+
+
 
 }
   layer = "services"

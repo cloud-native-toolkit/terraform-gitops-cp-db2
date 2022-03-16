@@ -93,3 +93,9 @@ variable "storageClass" {
   description = "The name of the server"
   default     = "portworx-db2-rwx-sc"
 }
+
+variable "database_name" {
+  type        = string
+  description = "The name of the database to be created"
+  default     = "OMS_DB"
+}

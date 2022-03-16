@@ -65,13 +65,12 @@ variable "git_credentials" {
 
 variable "namespace" {
   type        = string
-  description = "The namespace where the application should be deployed"
+  description = "Redundant namespace"
 }
 
 variable "cpd_namespace" {
   type        = string
-  description = "cpd namespace"
-  default     = "gitops-cp4d-instance"
+  description = "Namespace where cp4d is provisioned and where the db2 will be created"
 }
 
 variable "kubeseal_cert" {
@@ -88,13 +87,12 @@ variable "server_name" {
 
 variable "storageClass" {
   type        = string
-  description = "The name of the server"
+  description = "The RWX/RWO Storage Class needed to create db2"
 }
 
 variable "database_name" {
   type        = string
   description = "The name of the database to be created"
-  default     = "OMS_DB"
 }
 
 variable "db2instancetype" {
@@ -114,12 +112,24 @@ variable "defaultuserpwd" {
   description = "Password of the default user"
   default     = "db2password"
 }
-
-variable "db2instanceid" {
+variable "cp4dclusterhost" {
   type        = string
-  description = "Unique instance ID for each newly created DB2"
-  default     = "98765432190"
+  description = "The service name for cp4d"
+  default     = "https://ibm-nginx-svc"
 }
+variable "pvcsize" {
+  type        = string
+  description = "The size of the pvc that needs to be created"
+  default     = 10
+}
+
+variable "db2host" {
+  type        = string
+  description = "The https service name for database"
+  default     = "https://database-core-svc:3025"
+}
+
+
 
 
 
