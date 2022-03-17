@@ -7,7 +7,7 @@ locals {
   bin_dir       = module.setup_clis.bin_dir
   yaml_dir      = "${path.cwd}/.tmp/${local.name}/chart/${local.name}"
   #db2instanceid    = timestamp()
-  db2instanceid    = random_id.db2id.id
+  db2instanceid    = random_id.db2id.dec
   values_content = {
 jobName = "${local.name}-job" 
 ConfigmapName = "${local.name}-script-configmap"
