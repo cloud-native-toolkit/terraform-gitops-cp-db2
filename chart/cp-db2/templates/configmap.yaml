@@ -14,7 +14,7 @@ data:
     CPD_CLUSTER_HOST="${CPDClusterHost}"
     USERNAME="${ENV_USERNAME}"
     PASSWORD="${ENV_PASSWORD}"
-    export PYTHONIOENCODING=utf8
+    
 
     if [ "${CPD_CLUSTER_HOST}" != "" ] && [ "${USERNAME}" != "" ] && [ "${PASSWORD}" != "" ]; then
       if ! CPD_TOKEN=$(

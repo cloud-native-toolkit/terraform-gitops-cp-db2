@@ -1,5 +1,5 @@
 resource "random_id" "db2id" {
-  byte_length = 8
+  byte_length = 11
 }
 
 locals {

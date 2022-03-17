@@ -55,9 +55,8 @@ RESOURCE01="db2oltp"
 count=0
 
 STATEFULSET_COUNT=$(kubectl get statefulset -l icpdsupport/addOnId=${RESOURCE01} -n "${NAMESPACE}"|wc -l)
-INT_COUNT = `expr ${STATEFULSET_COUNT} + 0`
 
-until [[ ${INT_COUNT}>0 ]] || [[ $count -eq 21 ]]; do
+until [[ `expr ${STATEFULSET_COUNT} + 0`>0 ]] || [[ $count -eq 21 ]]; do
   echo "Waiting for pod ${RESOURCE01} in ${NAMESPACE}"
   count=$((count + 1))
   sleep 45
