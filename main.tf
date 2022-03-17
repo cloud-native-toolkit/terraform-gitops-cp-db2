@@ -1,9 +1,13 @@
+resource "random_id" "db2id" {
+  byte_length = 8
+}
 
 locals {
   name          = "cp-db2"
   bin_dir       = module.setup_clis.bin_dir
   yaml_dir      = "${path.cwd}/.tmp/${local.name}/chart/${local.name}"
-  db2instanceid    = timestamp()
+  #db2instanceid    = timestamp()
+  db2instanceid    = random_id.db2id.id
   values_content = {
 jobName = "${local.name}-job" 
 ConfigmapName = "${local.name}-script-configmap"
