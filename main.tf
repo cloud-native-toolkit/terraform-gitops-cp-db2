@@ -20,7 +20,7 @@ InstanceVersion = var.db2instanceversion
 InstanceId = local.db2instanceid
 CPDClusterHost = var.cp4dclusterhost
 DatabaseHost = var.db2host
-pvcsize = var.pvcsize
+
 }
   layer = "services"
   type  = "base"

@@ -112,11 +112,7 @@ variable "cp4dclusterhost" {
   description = "The service name for cp4d"
   default     = "https://ibm-nginx-svc"
 }
-variable "pvcsize" {
-  type        = string
-  description = "The size of the pvc that needs to be created"
-  default     = 10
-}
+
 
 variable "db2host" {
   type        = string

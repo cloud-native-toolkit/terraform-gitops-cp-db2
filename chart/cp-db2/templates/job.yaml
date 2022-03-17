@@ -34,8 +34,6 @@ spec:
               value: {{ .Values.database_name }}
             - name: storageclassname
               value: {{ .Values.storageClassName }}
-            - name: pvcsize
-              value: {{ .Values.pvcsize | quote }} 
             - name: InstanceType
               value: {{ .Values.InstanceType }}
             - name: InstanceVersion
