@@ -120,6 +120,12 @@ variable "db2host" {
   default     = "https://database-core-svc:3025"
 }
 
+variable "pvcsize" {
+  type        = string
+  description = "The size of the pvc that needs to be created"
+  default     = 10
+}
+
 
 
 

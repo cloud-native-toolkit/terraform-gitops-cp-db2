@@ -44,6 +44,8 @@ spec:
               value:  {{ .Values.CPDClusterHost }}
             - name: DatabaseHost
               value:  {{ .Values.DatabaseHost }}
+            - name: pvcsize
+              value: {{ .Values.pvcsize | quote }}
           command:
             - /bin/sh
           args:
