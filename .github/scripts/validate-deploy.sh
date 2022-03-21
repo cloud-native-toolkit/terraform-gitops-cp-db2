@@ -72,7 +72,7 @@ fi
 
 #kubectl get all -l icpdsupport/addOnId=${RESOURCE01} -n "${NAMESPACE}"|| exit 1
 #kubectl wait --for=condition=complete job/${JOB} || exit 1
-kubectl rollout status "statefulset/${STATEFULSET}" || exit 1
+kubectl rollout status "statefulset/"${STATEFULSET} -n "${NAMESPACE}" || exit 1
 
 cd ..
 rm -rf .testrepo

@@ -27,7 +27,7 @@ This module makes use of the output from other modules:
 ## Example usage
 
 ```hcl-terraform
-module "db2oltp" {
+module "cp-db2" {
   source = "https://github.com/cloud-native-toolkit/terraform-gitops-cp-db2.git"
 
   gitops_config = module.gitops.gitops_config
