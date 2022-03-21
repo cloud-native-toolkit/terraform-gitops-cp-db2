@@ -56,15 +56,17 @@ count=0
 
 STATEFULSET_COUNT=$(kubectl get statefulset -l icpdsupport/addOnId=${RESOURCE01} -n "${NAMESPACE}"|wc -l)
 
-until [[ `expr ${STATEFULSET_COUNT} + 0`>0 ]] || [[ $count -eq 21 ]]; do
+until [[ `expr ${STATEFULSET_COUNT} + 0`>0 ]] || [[ $count -eq 26 ]]; do
   echo "Waiting for statefulset  in ${NAMESPACE}"
+  SS_COUNT=$(kubectl get statefulset -l icpdsupport/addOnId=${RESOURCE01} -n "${NAMESPACE}"|wc -l)
+  STATEFULSET_COUNT = ${SS_COUNT}
   echo "SSCount: ${STATEFULSET_COUNT}"
   count=$((count + 1))
   sleep 45
 done
 STATEFULSET=$(kubectl get statefulset -l icpdsupport/addOnId=${RESOURCE01} -n "${NAMESPACE}" | grep ${RESOURCE01} | awk -v k="text" '{n=split($0,a," "); print a[1]}')
 echo "Waiting for Statefulset: ${STATEFULSET}"
-if [[ $count -eq 21 ]]; then
+if [[ $count -eq 26 ]]; then
   echo "Timed out waiting for  statefulset ${STATEFULSET} in ${NAMESPACE}"
   kubectl get all -n "${NAMESPACE}" 
   
