@@ -37,6 +37,7 @@ module "cp-db2" {
   kubeseal_cert = module.gitops.sealed_secrets_cert
   storageClass = var.storageClass
   database_name = var.database_name
+  pvcsize       = var.pvcsize
  
 }
 ```

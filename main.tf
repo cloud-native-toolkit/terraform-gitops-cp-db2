@@ -8,13 +8,14 @@ locals {
   yaml_dir      = "${path.cwd}/.tmp/${local.name}/chart/${local.name}"
   #db2instanceid    = timestamp()
   db2instanceid    = random_id.db2id.dec
+  defaultuserpaswrd=var.defaultuserpwd
   values_content = {
 jobName = "${local.name}-job" 
 ConfigmapName = "${local.name}-script-configmap"
 storageClassName = var.storageClass
 namespace = var.namespace
 database_name = var.database_name
-InstanceSecret = var.defaultuserpwd
+InstanceSecret = local.defaultuserpaswrd
 InstanceType = var.db2instancetype
 InstanceVersion = var.db2instanceversion
 InstanceId = local.db2instanceid

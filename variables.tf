@@ -122,8 +122,7 @@ variable "db2host" {
 
 variable "pvcsize" {
   type        = string
-  description = "The size of the pvc that needs to be created"
-  default     = 10
+  description = "The size of the pvc that needs to be created for db2"
 }
 
 

@@ -15,6 +15,8 @@ resource null_resource write_outputs {
         instanceid  = module.gitops_module.instanceid
         storageClass = module.gitops_module.storageClass
         database_name = module.gitops_module.database_name
+        pvcsize       = module.gitops_module.pvcsize
+        defaultuserpaswrd = module.gitops_module.defaultuserpwd
       })
     }
   }

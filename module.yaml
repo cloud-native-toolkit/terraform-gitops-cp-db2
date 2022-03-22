@@ -58,3 +58,8 @@ versions:
           id: gitops-cp-db2
           output: database_name
           important: true
+      - name: pvcsize
+        moduleRef:
+          id: gitops-cp-db2
+          output: pvcsize
+          important: true

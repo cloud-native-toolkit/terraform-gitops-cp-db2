@@ -54,3 +54,17 @@ output "database_name" {
   value       = var.database_name
   depends_on  = [null_resource.setup_gitops]
 }
+
+output "pvcsize" {
+  description = "The size of the pvc that needs to be created for db2"
+  value       = var.pvcsize
+  depends_on  = [null_resource.setup_gitops]
+}
+
+output "defaultuserpaswrd" {
+  description = "Password of the default user"
+  value       = local.defaultuserpaswrd
+  depends_on  = [null_resource.setup_gitops]
+}
+
+
