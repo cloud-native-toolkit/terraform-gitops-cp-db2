@@ -1,5 +1,6 @@
-# Starter kit for a Terraform GitOps module
-Module to provision a gitops repo with the resources necessary to provision a DB2 in Cloud Pak for Data. 
+# Cloud Pak DB2 database instance gitops module
+
+Module to populate a gitops repo with the resources necessary to provision a DB2 database instance from Cloud Pak for Data. 
 
 ## Software dependencies
 
