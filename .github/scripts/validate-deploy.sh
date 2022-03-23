@@ -4,7 +4,7 @@ GIT_REPO=$(cat git_repo)
 GIT_TOKEN=$(cat git_token)
 
 export KUBECONFIG=$(cat .kubeconfig)
-NAMESPACE=$(cat .namespace)
+NAMESPACE=$(jq -r '.cpd_namespace // "gitops-cp4d-instance"' gitops-output.json)
 COMPONENT_NAME=$(jq -r '.name // "my-module"' gitops-output.json)
 BRANCH=$(jq -r '.branch // "main"' gitops-output.json)
 SERVER_NAME=$(jq -r '.server_name // "default"' gitops-output.json)
@@ -50,21 +50,30 @@ else
   sleep 30
 fi
 
-DEPLOYMENT="${COMPONENT_NAME}-${BRANCH}"
-count=0
-until kubectl get deployment "${DEPLOYMENT}" -n "${NAMESPACE}" || [[ $count -eq 20 ]]; do
-  echo "Waiting for deployment/${DEPLOYMENT} in ${NAMESPACE}"
-  count=$((count + 1))
-  sleep 15
-done
+RESOURCE01="db2oltp"
 
-if [[ $count -eq 20 ]]; then
-  echo "Timed out waiting for deployment/${DEPLOYMENT} in ${NAMESPACE}"
-  kubectl get all -n "${NAMESPACE}"
+count=0
+
+SS_COUNT=$(kubectl get statefulset -l icpdsupport/addOnId=${RESOURCE01} -n "${NAMESPACE}"|wc -l)
+
+until [[ `expr ${SS_COUNT} + 0`>0 ]] || [[ $count -eq 26 ]]; do
+  echo "Waiting for statefulset  in ${NAMESPACE}"
+  SS_COUNT=$(kubectl get statefulset -l icpdsupport/addOnId=${RESOURCE01} -n "${NAMESPACE}"|wc -l)
+  echo "SSCount: ${SS_COUNT}"
+  count=$((count + 1))
+  sleep 45
+done
+STATEFULSET=$(kubectl get statefulset -l icpdsupport/addOnId=${RESOURCE01} -n "${NAMESPACE}" | grep ${RESOURCE01} | awk -v k="text" '{n=split($0,a," "); print a[1]}')
+echo "Waiting for Statefulset: ${STATEFULSET}"
+if [[ $count -eq 26 ]]; then
+  echo "Timed out waiting for  statefulset ${STATEFULSET} in ${NAMESPACE}"
+  kubectl get all -n "${NAMESPACE}" 
   exit 1
 fi
 
-kubectl rollout status "deployment/${DEPLOYMENT}" -n "${NAMESPACE}" || exit 1
+#kubectl get all -l icpdsupport/addOnId=${RESOURCE01} -n "${NAMESPACE}"|| exit 1
+#kubectl wait --for=condition=complete job/${JOB} || exit 1
+kubectl rollout status "statefulset/"${STATEFULSET} -n "${NAMESPACE}" || exit 1
 
 cd ..
 rm -rf .testrepo

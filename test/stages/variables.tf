@@ -23,6 +23,13 @@ variable "namespace" {
   description = "Namespace for tools"
 }
 
+
+variable "cpd_namespace" {
+  type        = string
+  description = "Namespace for cpd services"
+  default = "gitops-cp4d-instance"
+}
+
 variable "cluster_name" {
   type        = string
   description = "The name of the cluster"
@@ -75,3 +82,29 @@ variable "kubeseal_namespace" {
 
 variable "cp_entitlement_key" {
 }
+
+variable "storageClass" {
+  type        = string
+  description = "The name of the server"
+  default     = "portworx-db2-rwx-sc"
+}
+
+variable "database_name" {
+  type        = string
+  description = "The name of the database to be created"
+  default     = "OMS_DB"
+}
+
+variable "pvcsize" {
+  type        = string
+  description = "The size of the pvc that needs to be created"
+  default     = 10
+}
+
+resource null_resource write_namespace {
+  provisioner "local-exec" {
+    command = "echo -n '${var.cpd_namespace}' > .cpd_namespace"
+  }
+}
+
+

@@ -12,6 +12,11 @@ resource null_resource write_outputs {
         layer       = module.gitops_module.layer
         layer_dir   = module.gitops_module.layer == "infrastructure" ? "1-infrastructure" : (module.gitops_module.layer == "services" ? "2-services" : "3-applications")
         type        = module.gitops_module.type
+        instanceid  = module.gitops_module.instanceid
+        storageClass = module.gitops_module.storageClass
+        database_name = module.gitops_module.database_name
+        pvcsize       = module.gitops_module.pvcsize
+        defaultuserpaswrd = module.gitops_module.defaultuserpaswrd
       })
     }
   }

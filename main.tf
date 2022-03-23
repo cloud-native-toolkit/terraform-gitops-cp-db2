@@ -1,10 +1,29 @@
+resource "random_id" "db2id" {
+  byte_length = 9
+}
+
 locals {
-  name          = "my-module"
+  name          = "cp-db2"
   bin_dir       = module.setup_clis.bin_dir
   yaml_dir      = "${path.cwd}/.tmp/${local.name}/chart/${local.name}"
-  service_url   = "http://${local.name}.${var.namespace}"
+  #db2instanceid    = timestamp()
+  db2instanceid    = random_id.db2id.dec
+  defaultuserpaswrd=var.defaultuserpwd
   values_content = {
-  }
+jobName = "${local.name}-job" 
+ConfigmapName = "${local.name}-script-configmap"
+storageClassName = var.storageClass
+namespace = var.namespace
+database_name = var.database_name
+InstanceSecret = local.defaultuserpaswrd
+InstanceType = var.db2instancetype
+InstanceVersion = var.db2instanceversion
+InstanceId = local.db2instanceid
+CPDClusterHost = var.cp4dclusterhost
+DatabaseHost = var.db2host
+pvcsize = var.pvcsize
+
+}
   layer = "services"
   type  = "base"
   application_branch = "main"
