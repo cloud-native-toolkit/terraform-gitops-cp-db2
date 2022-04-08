@@ -8,6 +8,7 @@ locals {
   yaml_dir      = "${path.cwd}/.tmp/${local.name}/chart/${local.name}"
   #db2instanceid    = timestamp()
   db2instanceid    = random_id.db2id.dec
+  dbconnectionhost = "${var.dbconnectionhostprefix}-${local.db2instanceid}-${var.dbconnectionhostsuffix}"
   defaultuserpaswrd=var.defaultuserpwd
   values_content = {
 jobName = "${local.name}-job" 

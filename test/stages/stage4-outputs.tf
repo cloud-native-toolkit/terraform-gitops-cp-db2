@@ -17,6 +17,7 @@ resource null_resource write_outputs {
         database_name = module.gitops_module.database_name
         pvcsize       = module.gitops_module.pvcsize
         defaultuserpaswrd = module.gitops_module.defaultuserpaswrd
+        dbconnectionhost = module.gitops_module.dbconnectionhost
       })
     }
   }
