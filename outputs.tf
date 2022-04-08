@@ -67,9 +67,9 @@ output "defaultuserpaswrd" {
   depends_on  = [null_resource.setup_gitops]
 }
 
-output "db2host" {
+output "dbconnectionhost" {
   description = "Password of the default user"
-  value       = local.db2host
+  value       = local.dbconnectionhost
   depends_on  = [null_resource.setup_gitops]
 }
 

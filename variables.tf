@@ -125,6 +125,20 @@ variable "pvcsize" {
   description = "The size of the pvc that needs to be created for db2"
 }
 
+variable "dbconnectionhostprefix" {
+  type        = string
+  description = "Prefix of the db2 connection host"
+  default     = "c-db2oltp"
+}
+
+variable "dbconnectionhostsuffix" {
+  type        = string
+  description = "Suffix of the db2 connection host"
+  default     = "db2u-engn-svc"
+}
+
+
+
 
 
 
