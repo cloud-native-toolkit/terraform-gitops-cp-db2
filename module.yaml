@@ -19,10 +19,10 @@ versions:
         refs:
           - source: github.com/cloud-native-toolkit/terraform-gitops-namespace.git
             version: ">= 1.0.0"
-      - id: gitops-db2u
-        refs:
-          - source: github.com/cloud-native-toolkit/terraform-gitops-db2u-operator.git
-            version: ">= 1.0.0" 
+    #  - id: gitops-db2u
+    #    refs:
+    #      - source: github.com/cloud-native-toolkit/terraform-gitops-db2u-operator.git
+    #        version: ">= 1.0.0" 
       - id: gitops-db2-oltp
         refs:
           - source: github.com/cloud-native-toolkit/terraform-gitops-cp-db2-oltp.git
