@@ -9,6 +9,9 @@ module "gitops_module" {
   storageClass = var.storageClass
   database_name = var.database_name
   pvcsize = var.pvcsize
+
+  db2instancetype = "db2wh"
+  database_name = "db2wh"
  
 
 }

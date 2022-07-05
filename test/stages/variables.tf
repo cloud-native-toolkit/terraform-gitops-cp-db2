@@ -27,7 +27,19 @@ variable "namespace" {
 variable "cpd_namespace" {
   type        = string
   description = "Namespace for cpd services"
-  default = "gitops-cp4d-instance"
+  default = "cp4d"
+}
+
+variable "common_services_namespace" {
+  type        = string
+  description = "Namespace for cp4d common services"
+  default = "ibm-common-services"
+}
+
+variable "operator_namespace" {
+  type        = string
+  description = "Namespace for cp4d operators"
+  default = "cpd-operators"
 }
 
 variable "cluster_name" {
@@ -80,8 +92,6 @@ variable "kubeseal_namespace" {
   default = "sealed-secrets"
 }
 
-variable "cp_entitlement_key" {
-}
 
 variable "storageClass" {
   type        = string
@@ -92,7 +102,7 @@ variable "storageClass" {
 variable "database_name" {
   type        = string
   description = "The name of the database to be created"
-  default     = "OMS_DB"
+  default     = "db2wh"
 }
 
 variable "pvcsize" {
