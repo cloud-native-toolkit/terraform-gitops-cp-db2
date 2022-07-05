@@ -10,7 +10,7 @@ module "gitops_module" {
   database_name = var.database_name
   pvcsize = var.pvcsize
 
-  db2instancetype = "db2wh"
- 
+  #db2instancetype = "db2wh"
+
 
 }
