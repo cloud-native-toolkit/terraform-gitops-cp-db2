@@ -11,7 +11,6 @@ module "gitops_module" {
   pvcsize = var.pvcsize
 
   db2instancetype = "db2wh"
-  database_name = "db2wh"
  
 
 }
