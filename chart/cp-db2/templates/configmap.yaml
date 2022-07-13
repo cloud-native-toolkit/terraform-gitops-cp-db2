@@ -17,8 +17,8 @@ data:
 
     echo "Testing ${DatabaseHost} is available."
     counter=0
-    maximum=60  # 60 iterations is 5 minutes
-    until $(curl --output /dev/null --silent --head --fail "${DatabaseHost}"); do
+    maximum=60  # 60 iterations is 10 minutes
+    while [[ "$(curl -k --head "${DatabaseHost}")" == *"Could not resolve host"* ]]; do
       if [ ${counter} -eq ${maximum} ];then
         echo "${DatabaseHost} is unreachable"
         exit 1
