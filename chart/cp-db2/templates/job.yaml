@@ -5,6 +5,7 @@ metadata:
   #label:
     #app: db2schema
 spec:
+  backoffLimit: 20
   template:
     metadata:
       name: db2-setup-pod
