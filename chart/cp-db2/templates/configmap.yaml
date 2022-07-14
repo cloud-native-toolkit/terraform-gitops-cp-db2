@@ -19,11 +19,12 @@ data:
     counter=0
     maximum=60  # 60 iterations is 10 minutes
     searching=1
-    while [ searching -gt 0 ]; do
-      curl -k --head  --fail --silent --show-error "${DatabaseHost}" >output.txt 2>&1
+    while [ $searching -gt 0 ]; do
+      RESPONSE=$(curl -k --head  --fail --silent --show-error "${DatabaseHost}" 2>&1)
+      echo $RESPONSE
 
-      if [[ "$(cat output.txt)" != *"Could not resolve host"* ]]; then
-        searching = 0
+      if [[ "${RESPONSE}" == *"Could not resolve host"* ]]; then
+        searching=0
       fi
       if [ ${counter} -eq ${maximum} ];then
         echo "${DatabaseHost} is unreachable"
