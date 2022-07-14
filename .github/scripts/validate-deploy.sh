@@ -45,15 +45,18 @@ find . -name "*"
 
 set -e
 
-validate_gitops_content "${NAMESPACE}" "${LAYER}" "${SERVER_NAME}" "${TYPE}" "${COMPONENT_NAME}" "values.yaml"
+
+
+#validate_gitops_content "${NAMESPACE}" "${LAYER}" "${SERVER_NAME}" "${TYPE}" "${COMPONENT_NAME}" "values.yaml"
 
 #check_k8s_namespace "${NAMESPACE}"
 check_k8s_namespace "${CPD_NAMESPACE}"
+sleep 1m
 
 check_k8s_resource "${NAMESPACE}" "job" "cp-db2-job"
-
-
 sleep 30m
+
+
 
 #if [[ ! -f "argocd/${LAYER}/cluster/${SERVER_NAME}/${TYPE}/${NAMESPACE}-${COMPONENT_NAME}.yaml" ]]; then
 #  echo "ArgoCD config missing - argocd/${LAYER}/cluster/${SERVER_NAME}/${TYPE}/${NAMESPACE}-${COMPONENT_NAME}.yaml"
