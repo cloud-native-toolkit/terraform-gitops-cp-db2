@@ -23,9 +23,7 @@ data:
       RESPONSE=$(curl -k --head  --fail --silent --show-error "${DatabaseHost}" 2>&1)
       echo $RESPONSE
 
-      if [[ "${RESPONSE}" == *"Could not resolve host"* ]]; then
-        searching=1
-      else
+      if [[ ! "${RESPONSE}" == *"Could not resolve host"* ]]; then
         searching=0
       fi
       if [ ${counter} -eq ${maximum} ];then
