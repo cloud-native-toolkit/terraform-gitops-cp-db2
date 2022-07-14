@@ -96,7 +96,7 @@ variable "kubeseal_namespace" {
 variable "storageClass" {
   type        = string
   description = "The name of the server"
-  default     = "portworx-db-gp3-sc"
+  default     = "portworx-db2-rwx-sc"
 }
 
 variable "database_name" {

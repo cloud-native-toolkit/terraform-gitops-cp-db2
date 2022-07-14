@@ -47,7 +47,7 @@ set -e
 
 validate_gitops_content "${NAMESPACE}" "${LAYER}" "${SERVER_NAME}" "${TYPE}" "${COMPONENT_NAME}" "values.yaml"
 
-check_k8s_namespace "${NAMESPACE}"
+#check_k8s_namespace "${NAMESPACE}"
 check_k8s_namespace "${CPD_NAMESPACE}"
 
 check_k8s_resource "${NAMESPACE}" "job" "cp-db2-job"
