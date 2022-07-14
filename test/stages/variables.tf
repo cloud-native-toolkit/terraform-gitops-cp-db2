@@ -56,6 +56,7 @@ variable "gitops_repo_type" {
 variable "gitops_repo_repo" {
   type = string
   description = "The short name of the repository (i.e. the part after the org/group name)"
+  default = "db2wh-gitops"
 }
 variable "gitops_repo_branch" {
   type = string
