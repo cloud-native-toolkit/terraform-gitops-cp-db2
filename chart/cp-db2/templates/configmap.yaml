@@ -15,10 +15,16 @@ data:
     USERNAME="${ENV_USERNAME}"
     PASSWORD="${ENV_PASSWORD}"
 
-    echo "Testing ${DatabaseHost} is available."
+    echo "Testing ${DatabaseHost}."
     counter=0
     maximum=60  # 60 iterations is 10 minutes
-    while [[ "$(curl -k --head "${DatabaseHost}")" == *"Could not resolve host"* ]]; do
+    searching=1
+    while [ searching -gt 0 ]; do
+      curl -k --head  --fail --silent --show-error "${DatabaseHost}" >output.txt 2>&1
+
+      if [[ "$(cat output.txt)" != *"Could not resolve host"* ]]; then
+        searching = 0
+      fi
       if [ ${counter} -eq ${maximum} ];then
         echo "${DatabaseHost} is unreachable"
         exit 1
@@ -27,6 +33,7 @@ data:
       counter=$((counter+1))
       sleep 10
     done
+    echo "${DatabaseHost} is available"
     
 
     if [ "${CPD_CLUSTER_HOST}" != "" ] && [ "${USERNAME}" != "" ] && [ "${PASSWORD}" != "" ]; then
