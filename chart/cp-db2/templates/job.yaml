@@ -31,7 +31,7 @@ spec:
               value: {{ .Values.namespace }} 
             - name: InstanceSecret
               value: {{ .Values.InstanceSecret }}
-            - name: database-name
+            - name: DatabaseName
               value: {{ .Values.database_name }}
             - name: storageclassname
               value: {{ .Values.storageClassName }}

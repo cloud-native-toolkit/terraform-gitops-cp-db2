@@ -24,6 +24,8 @@ data:
       echo $RESPONSE
 
       if [[ "${RESPONSE}" == *"Could not resolve host"* ]]; then
+        searching=1
+      else
         searching=0
       fi
       if [ ${counter} -eq ${maximum} ];then
@@ -59,7 +61,7 @@ data:
     ############################################################
     
     if  [ "${DatabaseHost}" != "" ] && [ "$CPD_TOKEN" != "" ]; then
-      echo '{"ServiceInstanceDisplayName": "'"${database-name}"'", "ServiceInstanceNamespace":  "'"${InstanceNamespace}"'","ZenServiceInstanceInfo": { "ZenServiceInstanceType":  "'"${InstanceType}"'","ZenServiceInstanceID": "'"${InstanceId}"'","ZenServiceInstanceVersion":  "'"${InstanceVersion}"'","zenServiceInstanceSecret":  "'"${InstanceSecret}"'"},"metadata": { "api": true,"dedicated": false,"database-name":  "'"${database-name}"'","storage-class": [{ "name":  "'"${storageclassname}"'"}],"size": [{ "value": '${pvcsize}' }],"storage-class-access-mode": [{"name": "ReadWriteMany"} ]}}'
+      echo '{"ServiceInstanceDisplayName": "'"${DatabaseName}"'", "ServiceInstanceNamespace":  "'"${InstanceNamespace}"'","ZenServiceInstanceInfo": { "ZenServiceInstanceType":  "'"${InstanceType}"'","ZenServiceInstanceID": "'"${InstanceId}"'","ZenServiceInstanceVersion":  "'"${InstanceVersion}"'","zenServiceInstanceSecret":  "'"${InstanceSecret}"'"},"metadata": { "api": true,"dedicated": false,"database-name":  "'"${DatabaseName}"'","storage-class": [{ "name":  "'"${storageclassname}"'"}],"size": [{ "value": '${pvcsize}' }],"storage-class-access-mode": [{"name": "ReadWriteMany"} ]}}'
       if ! DBCREATION_RESPONSE=$(
         curl -k -X POST "${DatabaseHost}"/v1/provision -H 'Authorization: Bearer '"$CPD_TOKEN"'' -H 'cache-control: no-cache' -H 'content-type: application/json' -d '{"ServiceInstanceDisplayName": "'"${database-name}"'", "ServiceInstanceNamespace":  "'"${InstanceNamespace}"'","ZenServiceInstanceInfo": { "ZenServiceInstanceType":  "'"${InstanceType}"'","ZenServiceInstanceID": "'"${InstanceId}"'","ZenServiceInstanceVersion":  "'"${InstanceVersion}"'","zenServiceInstanceSecret":  "'"${InstanceSecret}"'"},"metadata": { "api": true,"dedicated": false,"database-name":  "'"${database-name}"'","storage-class": [{ "name":  "'"${storageclassname}"'"}],"size": [{ "value": '${pvcsize}' }],"storage-class-access-mode": [{"name": "ReadWriteMany"} ]}}'
           ); then

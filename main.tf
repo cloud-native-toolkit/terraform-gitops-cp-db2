@@ -11,20 +11,19 @@ locals {
   dbconnectionhost = "${var.dbconnectionhostprefix}-${local.db2instanceid}-${var.dbconnectionhostsuffix}"
   defaultuserpaswrd=var.defaultuserpwd
   values_content = {
-jobName = "${local.name}-job" 
-ConfigmapName = "${local.name}-script-configmap"
-storageClassName = var.storageClass
-namespace = var.namespace
-database_name = var.database_name
-InstanceSecret = local.defaultuserpaswrd
-InstanceType = var.db2instancetype
-InstanceVersion = var.db2instanceversion
-InstanceId = local.db2instanceid
-CPDClusterHost = var.cp4dclusterhost
-DatabaseHost = var.db2host
-pvcsize = var.pvcsize
-
-}
+    jobName = "${local.name}-job"
+    ConfigmapName = "${local.name}-script-configmap"
+    storageClassName = var.storageClass
+    namespace = var.namespace
+    database_name = var.database_name
+    InstanceSecret = local.defaultuserpaswrd
+    InstanceType = var.db2instancetype
+    InstanceVersion = var.db2instanceversion
+    InstanceId = local.db2instanceid
+    CPDClusterHost = var.cp4dclusterhost
+    DatabaseHost = var.db2host
+    pvcsize = var.pvcsize
+  }
   layer = "services"
   type  = "base"
   application_branch = "main"

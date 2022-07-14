@@ -1,4 +1,83 @@
 
+variable "gitea_namespace_name" {
+  type = string
+  description = "The value that should be used for the namespace"
+  default = "gitea"
+}
+
+variable "gitea_namespace_create_operator_group" {
+  type = bool
+  description = "Flag indicating that an operator group should be created in the namespace"
+  default = true
+}
+
+variable "gitea_namespace_argocd_namespace" {
+  type = string
+  description = "The namespace where argocd has been deployed"
+  default = "openshift-gitops"
+}
+
+variable "gitea_instance_name" {
+  type = string
+  description = "The name for the instance"
+  default = "gitea"
+}
+
+variable "gitea_username" {
+  type = string
+  description = "The username for the instance"
+  default = "gitea-admin"
+}
+
+variable "gitea_password" {
+  type = string
+  description = "The password for the instance"
+  default = ""
+}
+
+variable "gitops_repo_strict" {
+  type = bool
+  description = "Flag indicating that an error should be thrown if the repo already exists"
+  default = false
+}
+variable "debug" {
+  type = bool
+  description = "Flag indicating that debug loggging should be enabled"
+  default = false
+}
+
+variable "gitops_repo_type" {
+  type = string
+  description = "[Deprecated] The type of the hosted git repository."
+  default = ""
+}
+
+
+variable "gitops_repo_repo" {
+  type = string
+  description = "The short name of the repository (i.e. the part after the org/group name)"
+}
+variable "gitops_repo_branch" {
+  type = string
+  description = "The name of the branch that will be used. If the repo already exists (provision=false) then it is assumed this branch already exists as well"
+  default = "main"
+}
+variable "gitops_repo_public" {
+  type = bool
+  description = "Flag indicating that the repo should be public or private"
+  default = false
+}
+variable "gitops_repo_gitops_namespace" {
+  type = string
+  description = "The namespace where ArgoCD is running in the cluster"
+  default = "openshift-gitops"
+}
+variable "gitops_repo_server_name" {
+  type = string
+  description = "The name of the cluster that will be configured via gitops. This is used to separate the config by cluster"
+  default = "default"
+}
+
 variable cluster_username { 
   type        = string
   description = "The username for AWS access"
@@ -108,7 +187,7 @@ variable "database_name" {
 variable "pvcsize" {
   type        = string
   description = "The size of the pvc that needs to be created"
-  default     = 10
+  default     = 100
 }
 
 resource null_resource write_namespace {
