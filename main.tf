@@ -1,5 +1,9 @@
-resource "random_id" "db2id" {
-  byte_length = 9
+resource "random_string" "db2id" {
+  numeric = true
+  special = false
+  upper   = false
+  lower   = false
+  length  = 4
 }
 
 locals {
@@ -7,7 +11,7 @@ locals {
   bin_dir       = module.setup_clis.bin_dir
   yaml_dir      = "${path.cwd}/.tmp/${local.name}/chart/${local.name}"
   #db2instanceid    = timestamp()
-  db2instanceid    = random_id.db2id.dec
+  db2instanceid    = "${local.name}-${random_string.db2id.result}"
   dbconnectionhost = "${var.dbconnectionhostprefix}-${local.db2instanceid}-${var.dbconnectionhostsuffix}"
   defaultuserpaswrd=var.defaultuserpwd
   values_content = {
