@@ -183,13 +183,13 @@ variable "storageClass" {
 variable "database_name" {
   type        = string
   description = "The name of the database to be created"
-  default     = "db2wh"
+  default     = "TESTDB"
 }
 
 variable "pvcsize" {
   type        = string
   description = "The size of the pvc that needs to be created"
-  default     = 100
+  default     = 10
 }
 
 resource null_resource write_namespace {
