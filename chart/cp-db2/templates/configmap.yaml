@@ -23,7 +23,8 @@ data:
       RESPONSE=$(curl -k --head  --fail --silent --show-error "${DatabaseHost}" 2>&1)
       echo $RESPONSE
 
-      if [[ ! "${RESPONSE}" == *"Could not resolve host"* ]]; then
+
+      if ! [[ "${RESPONSE}" == *"Could not resolve host"* ]] || [[ "${RESPONSE}" == *"Failed to connect"* ]]; then
         searching=0
       fi
       if [ ${counter} -eq ${maximum} ];then
@@ -35,6 +36,17 @@ data:
       sleep 10
     done
     echo "${DatabaseHost} is available"
+
+
+
+    echo "oc patch deployment ibm-db2wh-cp4d-operator-controller-manager --patch '{\"spec\": {\"replicas\": 0}}' -n $OperatorNamespace"
+    oc patch deployment ibm-db2wh-cp4d-operator-controller-manager --patch '{"spec": {"replicas": 0}}' -n $OperatorNamespace
+
+    echo "oc get cm db2u-json-cm -n=\$InstanceNamespace -o=json | sed 's/set-kernel-params\\\": true/set-kernel-params\\\": false/g' | oc apply -f-"
+     oc get cm db2u-json-cm -n=$InstanceNamespace -o=json | sed 's/set-kernel-params\\\": true/set-kernel-params\\\": false/g' | oc apply -f-
+    echo "oc delete po \$(oc get po -n=$InstanceNamespace | grep zen-database-core | awk {'print \$1'}) -n=$InstanceNamespace"
+    oc delete po $(oc get po -n=$InstanceNamespace | grep zen-database-core | awk {'print $1'}) -n=$InstanceNamespace
+    sleep 30s
     
 
     if [ "${CPD_CLUSTER_HOST}" != "" ] && [ "${USERNAME}" != "" ] && [ "${PASSWORD}" != "" ]; then
@@ -69,4 +81,8 @@ data:
       echo "${InstanceType} created"
       echo ${DBCREATION_RESPONSE} | fold
     fi
-      
+
+    sleep 60s
+
+      echo "oc patch deployment ibm-db2wh-cp4d-operator-controller-manager --patch '{\"spec\": {\"replicas\": 1}}' -n $OperatorNamespace"
+      oc patch deployment ibm-db2wh-cp4d-operator-controller-manager --patch '{"spec": {"replicas": 1}}' -n "${OperatorNamespace}"

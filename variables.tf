@@ -138,6 +138,13 @@ variable "dbconnectionhostsuffix" {
 }
 
 
+variable "cpd_operator_namespace" {
+  type        = string
+  description = "Namespace for cpd commmon services"
+  default = "cpd-operators"
+}
+
+
 
 
 

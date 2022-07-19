@@ -12,6 +12,7 @@ spec:
       annotations:
         checksum/config-map: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
     spec:
+      serviceAccountName: db2wh-instance-sa
       restartPolicy: Never
       containers:
         - name: db2-setup-pod
@@ -28,7 +29,9 @@ spec:
                   name: admin-user-details
                   key: initial_admin_password
             - name: InstanceNamespace
-              value: {{ .Values.namespace }} 
+              value: {{ .Values.namespace }}
+            - name: OperatorNamespace
+              value: {{ .Values.operator_namespace }}
             - name: InstanceSecret
               value: {{ .Values.InstanceSecret }}
             - name: DatabaseName
