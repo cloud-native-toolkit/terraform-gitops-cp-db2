@@ -16,7 +16,7 @@ spec:
       restartPolicy: Never
       containers:
         - name: db2-setup-pod
-          image: quay.io/ibmgaragecloud/alpine-curl
+          image: quay.io/cloudnativetoolkit/cli-tools-core
           volumeMounts:
             - mountPath: /db2scripts
               name: db2scripts
