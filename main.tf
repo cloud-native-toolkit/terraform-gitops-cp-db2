@@ -103,25 +103,25 @@ module setup_instance_service_account {
   }]
   rbac_cluster_scope = true
 }
-#
-#module setup_instance_cpd_rbac {
-#  source = "github.com/cloud-native-toolkit/terraform-gitops-rbac.git?ref=v1.7.1"
-#
-#  gitops_config             = var.gitops_config
-#  git_credentials           = var.git_credentials
-#  service_account_namespace = module.setup_instance_service_account.namespace
-#  service_account_name      = module.setup_instance_service_account.name
-#  namespace                 = module.setup_instance_service_account.namespace
-#  rules                     = [
-#    {
-#      apiGroups = ["*"]
-#      resources = ["*"]
-#      verbs = ["*"]
-#    }
-#  ]
-#  server_name               = var.server_name
-#  cluster_scope             = false
-#}
+
+module setup_instance_cpd_rbac {
+  source = "github.com/cloud-native-toolkit/terraform-gitops-rbac.git?ref=v1.7.1"
+
+  gitops_config             = var.gitops_config
+  git_credentials           = var.git_credentials
+  service_account_namespace = module.setup_instance_service_account.namespace
+  service_account_name      = module.setup_instance_service_account.name
+  namespace                 = module.setup_instance_service_account.namespace
+  rules                     = [
+    {
+      apiGroups = ["*"]
+      resources = ["*"]
+      verbs = ["*"]
+    }
+  ]
+  server_name               = var.server_name
+  cluster_scope             = false
+}
 
 module setup_instance_operator_rbac {
   source = "github.com/cloud-native-toolkit/terraform-gitops-rbac.git?ref=v1.7.1"
