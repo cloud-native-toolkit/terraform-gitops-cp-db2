@@ -31,22 +31,21 @@ data:
         echo "${DatabaseHost} is unreachable"
         exit 1
       fi
-      printf '.'
       counter=$((counter+1))
       sleep 10
     done
     echo "${DatabaseHost} is available"
 
 
+    if [[ "${InstanceType}" == "db2wh" ]]; then
+      echo "oc patch deployment ibm-db2wh-cp4d-operator-controller-manager --patch '{\"spec\": {\"replicas\": 0}}' -n $OperatorNamespace"
+      oc patch deployment ibm-db2wh-cp4d-operator-controller-manager --patch '{"spec": {"replicas": 0}}' -n $OperatorNamespace
 
-    echo "oc patch deployment ibm-db2wh-cp4d-operator-controller-manager --patch '{\"spec\": {\"replicas\": 0}}' -n $OperatorNamespace"
-    oc patch deployment ibm-db2wh-cp4d-operator-controller-manager --patch '{"spec": {"replicas": 0}}' -n $OperatorNamespace
+      echo "oc get cm db2u-json-cm -n=$InstanceNamespace -o=json | sed 's/set-kernel-params\\\": true/set-kernel-params\\\": false/g' | oc apply -f-"
+      oc get cm db2u-json-cm -n=$InstanceNamespace -o=json | sed 's/set-kernel-params\\\": true/set-kernel-params\\\": false/g' | oc apply -f-
 
-    echo "oc get cm db2u-json-cm -n=$InstanceNamespace -o=json | sed 's/set-kernel-params\\\": true/set-kernel-params\\\": false/g' | oc apply -f-"
-    oc get cm db2u-json-cm -n=$Inst∂anceNamespace -o=json | sed 's/set-kernel-params\\\": true/set-kernel-params\\\": false/g' | oc apply -f-
-    echo "oc delete po \$(oc get po -n=$InstanceNamespace | grep zen-database-core | awk {'print \$1'}) -n=$InstanceNamespace"
-    oc delete po $(oc get po -n=$InstanceNamespace | grep zen-database-core | awk {'print $1'}) -n=$InstanceNamespace
-    sleep 30s
+      sleep 30s
+    fi
     
 
     if [ "${CPD_CLUSTER_HOST}" != "" ] && [ "${USERNAME}" != "" ] && [ "${PASSWORD}" != "" ]; then
@@ -82,7 +81,10 @@ data:
       echo ${DBCREATION_RESPONSE} | fold
     fi
 
-    sleep 60s
+
+    if [[ "${InstanceType}" == "db2wh" ]]; then
+      sleep 30s
 
       echo "oc patch deployment ibm-db2wh-cp4d-operator-controller-manager --patch '{\"spec\": {\"replicas\": 1}}' -n $OperatorNamespace"
       oc patch deployment ibm-db2wh-cp4d-operator-controller-manager --patch '{"spec": {"replicas": 1}}' -n "${OperatorNamespace}"
+    fi
