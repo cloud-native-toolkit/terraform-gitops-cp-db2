@@ -35,6 +35,7 @@ data:
       sleep 10
     done
     echo "${DatabaseHost} is available"
+    sleep 30s
 
 
     if [[ "${InstanceType}" == "db2wh" ]]; then
@@ -43,8 +44,6 @@ data:
 
       echo "oc get cm db2u-json-cm -n=$InstanceNamespace -o=json | sed 's/set-kernel-params\\\": true/set-kernel-params\\\": false/g' | oc apply -f-"
       oc get cm db2u-json-cm -n=$InstanceNamespace -o=json | sed 's/set-kernel-params\\\": true/set-kernel-params\\\": false/g' | oc apply -f-
-
-      sleep 30s
     fi
     
 
@@ -72,7 +71,7 @@ data:
     if  [ "${DatabaseHost}" != "" ] && [ "$CPD_TOKEN" != "" ]; then
       echo '{"ServiceInstanceDisplayName": "'"${DatabaseName}"'", "ServiceInstanceNamespace":  "'"${InstanceNamespace}"'","ZenServiceInstanceInfo": { "ZenServiceInstanceType":  "'"${InstanceType}"'","ZenServiceInstanceID": "'"${InstanceId}"'","ZenServiceInstanceVersion":  "'"${InstanceVersion}"'","zenServiceInstanceSecret":  "'"${InstanceSecret}"'"},"metadata": { "api": true,"dedicated": false,"database-name":  "'"${DatabaseName}"'","storage-class": [{ "name":  "'"${storageclassname}"'"}],"size": [{ "value": '${pvcsize}' }],"storage-class-access-mode": [{"name": "ReadWriteMany"} ]}}' | fold
       if ! DBCREATION_RESPONSE=$(
-        curl -k -X POST "${DatabaseHost}"/v1/provision -H 'Authorization: Bearer '"$CPD_TOKEN"'' -H 'cache-control: no-cache' -H 'content-type: application/json' -d '{"ServiceInstanceDisplayName": "'"${database-name}"'", "ServiceInstanceNamespace":  "'"${InstanceNamespace}"'","ZenServiceInstanceInfo": { "ZenServiceInstanceType":  "'"${InstanceType}"'","ZenServiceInstanceID": "'"${InstanceId}"'","ZenServiceInstanceVersion":  "'"${InstanceVersion}"'","zenServiceInstanceSecret":  "'"${InstanceSecret}"'"},"metadata": { "api": true,"dedicated": false,"database-name":  "'"${database-name}"'","storage-class": [{ "name":  "'"${storageclassname}"'"}],"size": [{ "value": '${pvcsize}' }],"storage-class-access-mode": [{"name": "ReadWriteMany"} ]}}'
+        curl -k -X POST "${DatabaseHost}"/v1/provision -H 'Authorization: Bearer '"$CPD_TOKEN"'' -H 'cache-control: no-cache' -H 'content-type: application/json' -d '{"ServiceInstanceDisplayName": "'"${DatabaseName}"'", "ServiceInstanceNamespace":  "'"${InstanceNamespace}"'","ZenServiceInstanceInfo": { "ZenServiceInstanceType":  "'"${InstanceType}"'","ZenServiceInstanceID": "'"${InstanceId}"'","ZenServiceInstanceVersion":  "'"${InstanceVersion}"'","zenServiceInstanceSecret":  "'"${InstanceSecret}"'"},"metadata": { "api": true,"dedicated": false,"database-name":  "'"${DatabaseName}"'","storage-class": [{ "name":  "'"${storageclassname}"'"}],"size": [{ "value": '${pvcsize}' }],"storage-class-access-mode": [{"name": "ReadWriteMany"} ]}}'
           ); then
         echo "Failed to Create ${InstanceType}"
         exit 1
@@ -80,6 +79,28 @@ data:
       echo "${InstanceType} created"
       echo ${DBCREATION_RESPONSE} | fold
     fi
+
+    PORT=$(echo $DBCREATION_RESPONSE | jq '.metadata.jdbc-port')
+
+
+     # Create secret containing database credentials
+    echo "{
+      \"metadata\": {
+        \"name\": \"${DatabaseName}-secret\",
+      },
+      \"apiVersion\": \"v1\",
+      \"kind\": \"Secret\",
+      \"data\": {
+        \"host\": \"${DatabaseHost}\",
+        \"port\": \"${PORT}\",
+        \"database\": \"${DatabaseName}\",
+        \"username\": \"${USERNAME}\",
+        \"password\": \"${PASSWORD}\"
+      }
+    }" > secret.json
+
+    oc create -f secrets.json
+    rm -rf secret.json
 
 
     if [[ "${InstanceType}" == "db2wh" ]]; then

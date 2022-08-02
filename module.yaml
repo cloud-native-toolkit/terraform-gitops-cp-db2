@@ -1,4 +1,6 @@
 name: gitops-cp-db2
+interfaces:
+  - github.com/cloud-native-toolkit/automation-modules#database-secret
 type: gitops
 description: Module to populate a gitops repository with the resources to configure a schema on a DB2 instance
 tags:
