@@ -61,7 +61,7 @@ data:
         exit 1
       fi
       echo "Token created"
-      echo ${CPD_TOKEN}
+      #echo ${CPD_TOKEN}
     fi
     
 
@@ -78,7 +78,7 @@ data:
         exit 1
       fi
       echo "${InstanceType} created"
-      echo ${DBCREATION_RESPONSE} | fold
+      #echo ${DBCREATION_RESPONSE} | fold
     fi
 
 

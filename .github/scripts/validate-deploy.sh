@@ -45,13 +45,11 @@ find . -name "*"
 
 set -e
 
-
+# sleep so that the db2wh operator and service can be deployed
+sleep 5m
 
 check_k8s_namespace "${CPD_NAMESPACE}"
 check_k8s_resource "${CPD_NAMESPACE}" "job" "cp-db2-job"
 
-
-#//cleanup?
-# - need to delete db2 instance
 
 
