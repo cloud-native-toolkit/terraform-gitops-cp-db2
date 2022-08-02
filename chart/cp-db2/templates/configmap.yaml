@@ -80,7 +80,8 @@ data:
       echo ${DBCREATION_RESPONSE} | fold
     fi
 
-    PORT=$(echo $DBCREATION_RESPONSE | jq '.metadata.jdbc-port')
+    # don't use JQ b/c response json is malformed
+    PORT=$(echo $DBCREATION_RESPONSE | sed -e 's/.*jdbc-port\:\(.*\)\,local-persistent-volume-detail:null.*/\1/')
 
 
      # Create secret containing database credentials
@@ -99,7 +100,7 @@ data:
       }
     }" > secret.json
 
-    oc create -f secrets.json
+    oc create -f secret.json
     rm -rf secret.json
 
 
