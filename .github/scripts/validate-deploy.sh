@@ -48,8 +48,6 @@ set -e
 
 
 check_k8s_namespace "${CPD_NAMESPACE}"
-sleep 20m
-
 check_k8s_resource "${CPD_NAMESPACE}" "job" "cp-db2-job"
 
 
