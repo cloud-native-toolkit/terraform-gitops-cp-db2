@@ -7,7 +7,6 @@ metadata:
 data:
   cp_db2_setup.sh: |
     #!/bin/sh
-    set -e
 
     ############################################################
     # Login to Cloud pak for Data and get the token
@@ -38,6 +37,7 @@ data:
     echo "${DatabaseHost} is available"
     sleep 30s
 
+    set -e
 
     if [[ "${InstanceType}" == "db2wh" ]]; then
       echo "oc patch deployment ibm-db2wh-cp4d-operator-controller-manager --patch '{\"spec\": {\"replicas\": 0}}' -n $OperatorNamespace"
@@ -87,7 +87,7 @@ data:
      # Create secret containing database credentials
     echo "{
       \"metadata\": {
-        \"name\": \"${DatabaseName}-secret\"
+        \"name\": \"$(echo $DatabaseName | awk '{print tolower($0)}')-secret\"
       },
       \"apiVersion\": \"v1\",
       \"kind\": \"Secret\",
@@ -102,7 +102,7 @@ data:
 
     cat secret.json
 
-    oc create -f secret.json
+    oc create -f secret.json -n $InstanceNamespace
     rm -rf secret.json
 
     echo "DB credentials secret created."
