@@ -7,6 +7,7 @@ metadata:
 data:
   cp_db2_setup.sh: |
     #!/bin/sh
+    set -e
 
     ############################################################
     # Login to Cloud pak for Data and get the token
@@ -80,9 +81,8 @@ data:
       echo ${DBCREATION_RESPONSE} | fold
     fi
 
-    # don't use JQ b/c response json is malformed
-    PORT=$(echo $DBCREATION_RESPONSE | sed -e 's/.*jdbc-port\:\(.*\)\,local-persistent-volume-detail:null.*/\1/')
 
+    PORT=$(echo $DBCREATION_RESPONSE | jq '.metadata."jdbc-port"')
 
      # Create secret containing database credentials
     echo "{
@@ -100,8 +100,12 @@ data:
       }
     }" > secret.json
 
+    cat secret.json
+
     oc create -f secret.json
     rm -rf secret.json
+
+    echo "DB credentials secret created."
 
 
     if [[ "${InstanceType}" == "db2wh" ]]; then
