@@ -87,16 +87,16 @@ data:
      # Create secret containing database credentials
     echo "{
       \"metadata\": {
-        \"name\": \"${DatabaseName}-secret\",
+        \"name\": \"${DatabaseName}-secret\"
       },
       \"apiVersion\": \"v1\",
       \"kind\": \"Secret\",
       \"data\": {
-        \"host\": \"${DatabaseHost}\",
-        \"port\": \"${PORT}\",
-        \"database\": \"${DatabaseName}\",
-        \"username\": \"${USERNAME}\",
-        \"password\": \"${PASSWORD}\"
+        \"host\": \"$(echo $DatabaseHost | base64)\",
+        \"port\": \"$(echo $PORT | base64)\",
+        \"database\": \"$(echo $DatabaseName | base64)\",
+        \"username\": \"$(echo $USERNAME | base64)\",
+        \"password\": \"$(echo $PASSWORD | base64)\"
       }
     }" > secret.json
 
