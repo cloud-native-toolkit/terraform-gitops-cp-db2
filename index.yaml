@@ -23,6 +23,204 @@ versions:
             version: '>= 1.0.0'
       - id: gitops-db2u
         refs:
+          - source: >-
+              github.com/cloud-native-toolkit/terraform-gitops-cp-db2wh-service.git
+            version: '>= 1.0.0'
+    variables:
+      - name: gitops_config
+        type: |-
+          object({
+              boostrap = object({
+                argocd-config = object({
+                  project = string
+                  repo = string
+                  url = string
+                  path = string
+                })
+              })
+              infrastructure = object({
+                argocd-config = object({
+                  project = string
+                  repo = string
+                  url = string
+                  path = string
+                })
+                payload = object({
+                  repo = string
+                  url = string
+                  path = string
+                })
+              })
+              services = object({
+                argocd-config = object({
+                  project = string
+                  repo = string
+                  url = string
+                  path = string
+                })
+                payload = object({
+                  repo = string
+                  url = string
+                  path = string
+                })
+              })
+              applications = object({
+                argocd-config = object({
+                  project = string
+                  repo = string
+                  url = string
+                  path = string
+                })
+                payload = object({
+                  repo = string
+                  url = string
+                  path = string
+                })
+              })
+            })
+        description: Config information regarding the gitops repo structure
+        moduleRef:
+          id: gitops
+          output: gitops_config
+      - name: git_credentials
+        type: |-
+          list(object({
+              repo = string
+              url = string
+              username = string
+              token = string
+            }))
+        description: The credentials for the gitops repo(s)
+        sensitive: true
+        moduleRef:
+          id: gitops
+          output: git_credentials
+      - name: namespace
+        type: string
+        description: Namespace where cp4d is provisioned and where the db2 will be created
+        moduleRef:
+          id: namespace
+          output: name
+      - name: kubeseal_cert
+        type: string
+        description: The certificate/public key used to encrypt the sealed secrets
+        default: ''
+        moduleRef:
+          id: gitops
+          output: sealed_secrets_cert
+      - name: server_name
+        type: string
+        description: The name of the server
+        default: default
+        moduleRef:
+          id: gitops
+          output: server_name
+      - name: storageClass
+        type: string
+        description: The RWX/RWO Storage Class needed to create db2
+        moduleRef:
+          id: gitops-cp-db2
+          output: storageClass
+          important: true
+      - name: database_name
+        type: string
+        description: The name of the database to be created
+        moduleRef:
+          id: gitops-cp-db2
+          output: database_name
+          important: true
+      - name: db2instancetype
+        type: string
+        description: type of db2 intance to be created - db2oltp of db2wh
+        default: db2oltp
+      - name: db2instanceversion
+        type: string
+        description: version of the DB2 instance
+        default: 11.5.7.0-x86_64
+      - name: defaultuserpwd
+        type: string
+        description: Password of the default user
+        default: db2password
+      - name: cp4dclusterhost
+        type: string
+        description: The service name for cp4d
+        default: https://ibm-nginx-svc
+      - name: db2host
+        type: string
+        description: The https service name for database
+        default: https://database-core-svc:3025
+      - name: pvcsize
+        type: string
+        description: The size of the pvc that needs to be created for db2
+        moduleRef:
+          id: gitops-cp-db2
+          output: pvcsize
+          important: true
+      - name: dbconnectionhostprefix
+        type: string
+        description: Prefix of the db2 connection host
+        default: c-db2oltp
+      - name: dbconnectionhostsuffix
+        type: string
+        description: Suffix of the db2 connection host
+        default: db2u-engn-svc
+      - name: cpd_operator_namespace
+        type: string
+        description: Namespace for cpd commmon services
+        default: cpd-operators
+    version: v0.0.4
+    outputs:
+      - name: name
+        description: The name of the module
+      - name: branch
+        description: The branch where the module config has been placed
+      - name: namespace
+        description: The namespace where the module will be deployed
+      - name: server_name
+        description: The server where the module will be deployed
+      - name: layer
+        description: The layer where the module is deployed
+      - name: type
+        description: The type of module where the module is deployed
+      - name: instanceid
+        description: Unique instance ID for each newly created DB2
+      - name: storageClass
+        description: The server where the module will be deployed
+      - name: database_name
+        description: The server where the module will be deployed
+      - name: pvcsize
+        description: The size of the pvc that needs to be created for db2
+      - name: defaultuserpaswrd
+        description: Password of the default user
+      - name: dbconnectionhost
+        description: Password of the default user
+      - name: secret_name
+        description: The name of the secret that contains the database credentials
+      - name: host_key
+        description: The key in the secret that holds the host information
+      - name: port_key
+        description: The key in the secret that holds the port information
+      - name: database_key
+        description: The key in the secret that holds the database name information
+      - name: username_key
+        description: The key in the secret that holds the username information
+      - name: password_key
+        description: The key in the secret that holds the password information
+  - platforms:
+      - kubernetes
+      - ocp3
+      - ocp4
+    dependencies:
+      - id: gitops
+        refs:
+          - source: github.com/cloud-native-toolkit/terraform-tools-gitops.git
+            version: '>= 1.1.0'
+      - id: namespace
+        refs:
+          - source: github.com/cloud-native-toolkit/terraform-gitops-namespace.git
+            version: '>= 1.0.0'
+      - id: gitops-db2u
+        refs:
           - source: github.com/cloud-native-toolkit/terraform-gitops-db2u-operator.git
             version: '>= 1.0.0'
       - id: gitops-db2-oltp
@@ -369,3 +567,5 @@ versions:
       - name: defaultuserpaswrd
         description: Password of the default user
 id: github.com/cloud-native-toolkit/terraform-gitops-cp-db2
+interfaces:
+  - github.com/cloud-native-toolkit/automation-modules#database-secret
