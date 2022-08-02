@@ -1,5 +1,9 @@
-resource "random_id" "db2id" {
-  byte_length = 9
+resource "random_string" "db2id" {
+  numeric = true
+  special = false
+  upper   = false
+  lower   = false
+  length  = 4
 }
 
 locals {
@@ -7,24 +11,24 @@ locals {
   bin_dir       = module.setup_clis.bin_dir
   yaml_dir      = "${path.cwd}/.tmp/${local.name}/chart/${local.name}"
   #db2instanceid    = timestamp()
-  db2instanceid    = random_id.db2id.dec
+  db2instanceid    = "${local.name}-${random_string.db2id.result}"
   dbconnectionhost = "${var.dbconnectionhostprefix}-${local.db2instanceid}-${var.dbconnectionhostsuffix}"
   defaultuserpaswrd=var.defaultuserpwd
   values_content = {
-jobName = "${local.name}-job" 
-ConfigmapName = "${local.name}-script-configmap"
-storageClassName = var.storageClass
-namespace = var.namespace
-database_name = var.database_name
-InstanceSecret = local.defaultuserpaswrd
-InstanceType = var.db2instancetype
-InstanceVersion = var.db2instanceversion
-InstanceId = local.db2instanceid
-CPDClusterHost = var.cp4dclusterhost
-DatabaseHost = var.db2host
-pvcsize = var.pvcsize
-
-}
+    jobName = "${local.name}-job"
+    ConfigmapName = "${local.name}-script-configmap"
+    storageClassName = var.storageClass
+    namespace = var.namespace
+    database_name = var.database_name
+    InstanceSecret = local.defaultuserpaswrd
+    InstanceType = var.db2instancetype
+    InstanceVersion = var.db2instanceversion
+    InstanceId = local.db2instanceid
+    CPDClusterHost = var.cp4dclusterhost
+    DatabaseHost = var.db2host
+    pvcsize = var.pvcsize
+    operator_namespace = var.cpd_operator_namespace
+  }
   layer = "services"
   type  = "base"
   application_branch = "main"
@@ -79,4 +83,62 @@ resource null_resource setup_gitops {
       GITOPS_CONFIG   = self.triggers.gitops_config
     }
   }
+}
+
+
+
+
+module setup_instance_service_account {
+  source = "github.com/cloud-native-toolkit/terraform-gitops-service-account.git"
+
+  gitops_config = var.gitops_config
+  git_credentials = var.git_credentials
+  namespace = var.namespace
+  name = "db2wh-instance-sa"
+  server_name = var.server_name
+  rbac_rules = [{
+    apiGroups = ["*"]
+    resources = ["*"]
+    verbs     = ["*"]
+  }]
+  rbac_cluster_scope = true
+}
+
+module setup_instance_cpd_rbac {
+  source = "github.com/cloud-native-toolkit/terraform-gitops-rbac.git?ref=v1.7.1"
+
+  gitops_config             = var.gitops_config
+  git_credentials           = var.git_credentials
+  service_account_namespace = module.setup_instance_service_account.namespace
+  service_account_name      = module.setup_instance_service_account.name
+  namespace                 = module.setup_instance_service_account.namespace
+  rules                     = [
+    {
+      apiGroups = ["*"]
+      resources = ["*"]
+      verbs = ["*"]
+    }
+  ]
+  server_name               = var.server_name
+  cluster_scope             = false
+}
+
+module setup_instance_operator_rbac {
+  source = "github.com/cloud-native-toolkit/terraform-gitops-rbac.git?ref=v1.7.1"
+  depends_on = [module.setup_instance_cpd_rbac]
+
+  gitops_config             = var.gitops_config
+  git_credentials           = var.git_credentials
+  service_account_namespace = var.namespace
+  service_account_name      = module.setup_instance_service_account.name
+  namespace                 = var.cpd_operator_namespace
+  rules                     = [
+    {
+      apiGroups = ["*"]
+      resources = ["*"]
+      verbs = ["*"]
+    }
+  ]
+  server_name               = var.server_name
+  cluster_scope             = false
 }

@@ -74,3 +74,44 @@ output "dbconnectionhost" {
 }
 
 
+
+
+
+
+output "secret_name" {
+  description = "The name of the secret that contains the database credentials"
+  value       = "${var.database_name}-secret"
+  depends_on  = [null_resource.setup_gitops]
+}
+
+output "host_key" {
+  description = "The key in the secret that holds the host information"
+  value       = "host"
+  depends_on  = [null_resource.setup_gitops]
+}
+
+output "port_key" {
+  description = "The key in the secret that holds the port information"
+  value       = "port"
+  depends_on  = [null_resource.setup_gitops]
+}
+
+output "database_key" {
+  description = "The key in the secret that holds the database name information"
+  value       = "database"
+  depends_on  = [null_resource.setup_gitops]
+}
+
+output "username_key" {
+  description = "The key in the secret that holds the username information"
+  value       = "username"
+  depends_on  = [null_resource.setup_gitops]
+}
+
+output "password_key" {
+  description = "The key in the secret that holds the password information"
+  value       = "password"
+  depends_on  = [null_resource.setup_gitops]
+}
+
+

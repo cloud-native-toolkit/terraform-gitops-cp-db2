@@ -99,7 +99,7 @@ variable "db2instancetype" {
 variable "db2instanceversion" {
   type        = string
   description = "version of the DB2 instance"
-  default     = "11.5.5.0-x86_64"
+  default     = "11.5.7.0-x86_64"
 }
 
 variable "defaultuserpwd" {
@@ -135,6 +135,13 @@ variable "dbconnectionhostsuffix" {
   type        = string
   description = "Suffix of the db2 connection host"
   default     = "db2u-engn-svc"
+}
+
+
+variable "cpd_operator_namespace" {
+  type        = string
+  description = "Namespace for cpd commmon services"
+  default = "cpd-operators"
 }
 
 

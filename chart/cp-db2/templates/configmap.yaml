@@ -14,6 +14,38 @@ data:
     CPD_CLUSTER_HOST="${CPDClusterHost}"
     USERNAME="${ENV_USERNAME}"
     PASSWORD="${ENV_PASSWORD}"
+
+    echo "Testing ${DatabaseHost}."
+    counter=0
+    maximum=60  # 60 iterations is 10 minutes
+    searching=1
+    while [ $searching -gt 0 ]; do
+      RESPONSE=$(curl -k --head  --fail --silent --show-error "${DatabaseHost}" 2>&1)
+      echo $RESPONSE
+
+
+      if ! [[ "${RESPONSE}" == *"Could not resolve host"* ]] || [[ "${RESPONSE}" == *"Failed to connect"* ]]; then
+        searching=0
+      fi
+      if [ ${counter} -eq ${maximum} ];then
+        echo "${DatabaseHost} is unreachable"
+        exit 1
+      fi
+      counter=$((counter+1))
+      sleep 10
+    done
+    echo "${DatabaseHost} is available"
+    sleep 30s
+
+    set -e
+
+    if [[ "${InstanceType}" == "db2wh" ]]; then
+      echo "oc patch deployment ibm-db2wh-cp4d-operator-controller-manager --patch '{\"spec\": {\"replicas\": 0}}' -n $OperatorNamespace"
+      oc patch deployment ibm-db2wh-cp4d-operator-controller-manager --patch '{"spec": {"replicas": 0}}' -n $OperatorNamespace
+
+      echo "oc get cm db2u-json-cm -n=$InstanceNamespace -o=json | sed 's/set-kernel-params\\\": true/set-kernel-params\\\": false/g' | oc apply -f-"
+      oc get cm db2u-json-cm -n=$InstanceNamespace -o=json | sed 's/set-kernel-params\\\": true/set-kernel-params\\\": false/g' | oc apply -f-
+    fi
     
 
     if [ "${CPD_CLUSTER_HOST}" != "" ] && [ "${USERNAME}" != "" ] && [ "${PASSWORD}" != "" ]; then
@@ -29,7 +61,7 @@ data:
         exit 1
       fi
       echo "Token created"
-      echo ${CPD_TOKEN}
+      #echo ${CPD_TOKEN}
     fi
     
 
@@ -38,13 +70,47 @@ data:
     ############################################################
     
     if  [ "${DatabaseHost}" != "" ] && [ "$CPD_TOKEN" != "" ]; then
-    if ! DBCREATION_RESPONSE=$(
-        curl -k -X POST "${DatabaseHost}"/v1/provision -H 'Authorization: Bearer '"$CPD_TOKEN"'' -H 'cache-control: no-cache' -H 'content-type: application/json' -d '{"ServiceInstanceDisplayName": "DB2", "ServiceInstanceNamespace":  "'"${InstanceNamespace}"'","ZenServiceInstanceInfo": { "ZenServiceInstanceType":  "'"${InstanceType}"'","ZenServiceInstanceID": "'"${InstanceId}"'","ZenServiceInstanceVersion":  "'"${InstanceVersion}"'","zenServiceInstanceSecret":  "'"${InstanceSecret}"'"},"metadata": { "api": true,"dedicated": false,"database-name":  "'"${database-name}"'","storage-class": [{ "name":  "'"${storageclassname}"'"}],"size": [{ "value": '${pvcsize}' }],"storage-class-access-mode": [{"name": "ReadWriteMany"} ]}}' 
+      echo '{"ServiceInstanceDisplayName": "'"${DatabaseName}"'", "ServiceInstanceNamespace":  "'"${InstanceNamespace}"'","ZenServiceInstanceInfo": { "ZenServiceInstanceType":  "'"${InstanceType}"'","ZenServiceInstanceID": "'"${InstanceId}"'","ZenServiceInstanceVersion":  "'"${InstanceVersion}"'","zenServiceInstanceSecret":  "'"${InstanceSecret}"'"},"metadata": { "api": true,"dedicated": false,"database-name":  "'"${DatabaseName}"'","storage-class": [{ "name":  "'"${storageclassname}"'"}],"size": [{ "value": '${pvcsize}' }],"storage-class-access-mode": [{"name": "ReadWriteMany"} ]}}' | fold
+      if ! DBCREATION_RESPONSE=$(
+        curl -k -X POST "${DatabaseHost}"/v1/provision -H 'Authorization: Bearer '"$CPD_TOKEN"'' -H 'cache-control: no-cache' -H 'content-type: application/json' -d '{"ServiceInstanceDisplayName": "'"${DatabaseName}"'", "ServiceInstanceNamespace":  "'"${InstanceNamespace}"'","ZenServiceInstanceInfo": { "ZenServiceInstanceType":  "'"${InstanceType}"'","ZenServiceInstanceID": "'"${InstanceId}"'","ZenServiceInstanceVersion":  "'"${InstanceVersion}"'","zenServiceInstanceSecret":  "'"${InstanceSecret}"'"},"metadata": { "api": true,"dedicated": false,"database-name":  "'"${DatabaseName}"'","storage-class": [{ "name":  "'"${storageclassname}"'"}],"size": [{ "value": '${pvcsize}' }],"storage-class-access-mode": [{"name": "ReadWriteMany"} ]}}'
           ); then
-        echo "Failed to Create DB2OLTP"
+        echo "Failed to Create ${InstanceType}"
         exit 1
       fi
-      echo "DB2OLTP created"
-      echo ${DBCREATION_RESPONSE}
+      echo "${InstanceType} created"
+      #echo ${DBCREATION_RESPONSE} | fold
     fi
-      
+
+
+    PORT=$(echo $DBCREATION_RESPONSE | jq '.metadata."jdbc-port"')
+
+     # Create secret containing database credentials
+    echo "{
+      \"metadata\": {
+        \"name\": \"$(echo $DatabaseName | awk '{print tolower($0)}')-secret\"
+      },
+      \"apiVersion\": \"v1\",
+      \"kind\": \"Secret\",
+      \"data\": {
+        \"host\": \"$(echo $DatabaseHost | base64)\",
+        \"port\": \"$(echo $PORT | base64)\",
+        \"database\": \"$(echo $DatabaseName | base64)\",
+        \"username\": \"$(echo $USERNAME | base64)\",
+        \"password\": \"$(echo $PASSWORD | base64)\"
+      }
+    }" > secret.json
+
+    cat secret.json
+
+    oc create -f secret.json -n $InstanceNamespace
+    rm -rf secret.json
+
+    echo "DB credentials secret created."
+
+
+    if [[ "${InstanceType}" == "db2wh" ]]; then
+      sleep 30s
+
+      echo "oc patch deployment ibm-db2wh-cp4d-operator-controller-manager --patch '{\"spec\": {\"replicas\": 1}}' -n $OperatorNamespace"
+      oc patch deployment ibm-db2wh-cp4d-operator-controller-manager --patch '{"spec": {"replicas": 1}}' -n "${OperatorNamespace}"
+    fi

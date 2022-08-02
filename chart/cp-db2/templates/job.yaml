@@ -5,16 +5,18 @@ metadata:
   #label:
     #app: db2schema
 spec:
+  backoffLimit: 20
   template:
     metadata:
       name: db2-setup-pod
       annotations:
         checksum/config-map: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
     spec:
+      serviceAccountName: db2wh-instance-sa
       restartPolicy: Never
       containers:
         - name: db2-setup-pod
-          image: quay.io/ibmgaragecloud/alpine-curl
+          image: quay.io/cloudnativetoolkit/cli-tools-core
           volumeMounts:
             - mountPath: /db2scripts
               name: db2scripts
@@ -27,10 +29,12 @@ spec:
                   name: admin-user-details
                   key: initial_admin_password
             - name: InstanceNamespace
-              value: {{ .Values.namespace }} 
+              value: {{ .Values.namespace }}
+            - name: OperatorNamespace
+              value: {{ .Values.operator_namespace }}
             - name: InstanceSecret
               value: {{ .Values.InstanceSecret }}
-            - name: database-name
+            - name: DatabaseName
               value: {{ .Values.database_name }}
             - name: storageclassname
               value: {{ .Values.storageClassName }}
