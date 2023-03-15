@@ -13,6 +13,9 @@ versions:
       - ocp3
       - ocp4
     dependencies:
+      - id: cluster
+        interface: github.com/cloud-native-toolkit/automation-modules#cluster
+        refs: []
       - id: gitops
         refs:
           - source: github.com/cloud-native-toolkit/terraform-tools-gitops.git
@@ -21,10 +24,10 @@ versions:
         refs:
           - source: github.com/cloud-native-toolkit/terraform-gitops-namespace.git
             version: ">= 1.0.0"
-      - id: gitops-db2u
+      - id: storage
         refs:
-          - source: github.com/cloud-native-toolkit/terraform-gitops-cp-db2wh-service.git
-            version: ">= 1.0.0"      
+          - source: github.com/cloud-native-toolkit/terraform-util-storage-class-manager.git
+            version: ">= 1.0.0"
     variables:
       - name: gitops_config
         moduleRef:
@@ -46,18 +49,17 @@ versions:
         moduleRef:
           id: gitops
           output: sealed_secrets_cert
-      - name: storageClass
+      - name: storage_class
         moduleRef:
-          id: gitops-cp-db2
-          output: storageClass
-          important: true
-      - name: database_name
+          id: storage
+          output: rwx_storage_class
+      - name: ingress_subdomain
         moduleRef:
-          id: gitops-cp-db2
-          output: database_name
-          important: true
-      - name: pvcsize
+          id: cluster
+          output: platform.ingress
+      - name: cluster_name
         moduleRef:
-          id: gitops-cp-db2
-          output: pvcsize
-          important: true
+          id: cluster
+          output: name
+      - name: entitlement_key
+        scope: global
