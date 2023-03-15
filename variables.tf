@@ -80,76 +80,22 @@ variable "server_name" {
   default     = "default"
 }
 
-variable "storageClass" {
+variable "storage_class" {
   type        = string
   description = "The RWX/RWO Storage Class needed to create db2"
 }
 
-variable "database_name" {
+variable "ingress_subdomain" {
   type        = string
-  description = "The name of the database to be created"
+  description = "The ingress subdomain of the cluster"
 }
 
-variable "db2instancetype" {
+variable "cluster_name" {
   type        = string
-  description = "type of db2 intance to be created - db2oltp of db2wh"
-  default     = "db2oltp"
+  description = "The name of the cluster where db2 will be installed"
 }
 
-variable "db2instanceversion" {
+variable "entitlement_key" {
   type        = string
-  description = "version of the DB2 instance"
-  default     = "11.5.7.0-x86_64"
+  description = "Cloud Pak entitlement key"
 }
-
-variable "defaultuserpwd" {
-  type        = string
-  description = "Password of the default user"
-  default     = "db2password"
-}
-variable "cp4dclusterhost" {
-  type        = string
-  description = "The service name for cp4d"
-  default     = "https://ibm-nginx-svc"
-}
-
-
-variable "db2host" {
-  type        = string
-  description = "The https service name for database"
-  default     = "https://database-core-svc:3025"
-}
-
-variable "pvcsize" {
-  type        = string
-  description = "The size of the pvc that needs to be created for db2"
-}
-
-variable "dbconnectionhostprefix" {
-  type        = string
-  description = "Prefix of the db2 connection host"
-  default     = "c-db2oltp"
-}
-
-variable "dbconnectionhostsuffix" {
-  type        = string
-  description = "Suffix of the db2 connection host"
-  default     = "db2u-engn-svc"
-}
-
-
-variable "cpd_operator_namespace" {
-  type        = string
-  description = "Namespace for cpd commmon services"
-  default = "cpd-operators"
-}
-
-
-
-
-
-
-
-
-
-

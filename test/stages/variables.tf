@@ -198,4 +198,6 @@ resource null_resource write_namespace {
   }
 }
 
-
+variable "cp_entitlement_key" {
+  type = string
+}
